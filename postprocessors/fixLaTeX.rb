@@ -2,7 +2,7 @@
 #encoding: utf-8
 
 # This tweaks several parts of the Pandoc LaTeX output
-# VERSION: 1.0.1
+# VERSION: 1.0.3
 
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
@@ -33,7 +33,14 @@ end
 output.gsub!(/\\begin\{quote\}/, '\begin{quote}\emph{')
 output.gsub!(/\\end\{quote\}/, '}\end{quote}')
 
-# make sure references are small and sans-font
-output.gsub!(/\\label{(references|bibliography)}/, '\\label{\1}\\setstretch{0.75}\\sffamily\\small')
+# make isolated figures centered
+output.gsub!(/^\\includegraphics{/, '\\includegraphics[center]{')
+#output.gsub!(/^\\includegraphics\[([^\]]*)\]/, '\\includegraphics[\1,center]')
+
+# make sure reference typography is small and sans-font
+output.gsub!(/\\label{(.*(references|bibliography))}/, '\\label{\1}\\setstretch{0.75}\\sffamily\\small')
+
+# simplify DOI links
+output.gsub!(/\\url{https:\/\/doi.org\/([^\}]+)}/,'\\href{https://doi.org/\1}{doi:\1}')
 
 puts output
