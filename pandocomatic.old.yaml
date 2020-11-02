@@ -1,0 +1,663 @@
+# --------------------------- Pandocomatic templates -------------------------
+# REMEMBER that YAML requires spaces not tabs, and indentation is important!
+settings:
+  recursive: true
+  follow-symlinks: true
+  skip: ['.*', 'pandocomatic.yaml']
+  match-files: 'first'
+templates:
+#-----------------------------------------------------------------------------
+#:::::::::::::::::::::::::::::::::: User Info ::::::::::::::::::::::::::
+#-----------------------------------------------------------------------------
+  user-info:
+    metadata:
+      bibliography: "/Users/zvb1/Library/texmf/bibtex/bib/BibDeskLibrary.json" #converted from the bib format, just for CSL use.
+      author: 
+        name: Zvi Biener
+        jobtitle:
+          - Associate Professor
+          - Department of Philosophy
+        affiliation: University of Cincinnati
+      correspondence: \href{mailto:zvi.biener@uc.edu}{zvi.biener@uc.edu}
+      phone: 513-818-2984
+      institute: University of Cincinnati
+      opening: To whom it may concern,
+      closing: Sincerely,
+      return-address:
+        - "**Department of Philosophy**"
+        - "**Arts & Sciences**"
+        - ML 0374
+        - University of Cincinnati
+        - Cincinnati OH 45221-0374
+      signature: "/Users/zvb1/.pandoc/images/ZBsignature.pdf"
+      created: "<$createdDate>"
+      compiled: "<$fulldate> @ <$fulltime>"
+      wordcount: <$wc>
+      lang: 'en-US'
+#-----------------------------------------------------------------------------
+#:::::::::::::::::::::::::::::::::: GENERAL ::::::::::::::::::::::::::::::::::
+#-----------------------------------------------------------------------------
+  refs:
+    extends: [user-info]
+    setup: []
+    preprocessors: []
+    pandoc:
+      standalone: true
+      filter:
+        - pandoc-citeproc #process citations
+      csl: csl/chicago-author-date.csl
+      resource-path: "./:images" #adds images directory relative to the path of the compiled file
+      #citation-abbreviations: "cite-abbr.json" # my journal abbreviations
+    metadata:
+      reference-section-title: "References"
+      notes-after-punctuation: false
+      link-citations: true
+    postprocessors: []
+    cleanup: []
+#-----------------------------------------------------------------------------
+  bib-refs:
+    extends: [user-info]
+    pandoc:
+      standalone: true
+      biblatex: true
+    metadata:
+      bibliography: "/Users/zvb1/Library/texmf/bibtex/bib/BibDeskLibrary.bib"
+
+
+#-----------------------------------------------------------------------------
+#:::::::::::::::::::::::::::::::::: DOCX :::::::::::::::::::::::::::::::::::::
+#-----------------------------------------------------------------------------
+  docx:
+    extends: [user-info,refs]
+    pandoc:
+      from: markdown
+      to: docx
+      standalone: true
+      filter:
+        - 'filters/removeHR' #remove horizontal rules
+        - 'filters/prependKeywords' #add keywords paragraph if keywords: metadata present
+        - 'filters/prependComments' #add comments paragraph if comments: metadata present
+        - 'filters/prependInstitute' #add affiliations paragraph if institute: metadata present
+        #- 'filters/prependAll' # prepends institute:, comments: and keywords: metadata
+      reference-doc: 'templates/custom-cambria.docx'
+#-----------------------------------------------------------------------------
+  article-docx:
+    extends: [docx,refs]
+#-----------------------------------------------------------------------------
+  letter-docx:
+    extends: [docx,refs]
+    pandoc:
+      reference-doc: templates/UC_Letterhead.docx
+
+#-----------------------------------------------------------------------------
+#:::::::::::::::::::::::::::::::::: LATEX ::::::::::::::::::::::::::::::::::::
+#-----------------------------------------------------------------------------
+  latex:
+    extends: [user-info,refs]
+    preprocessors:
+      - preprocessors/removeImageDimensions #remove image dimensions
+    pandoc:
+      from: markdown+raw_tex
+      to: latex
+      pdf-engine: xelatex
+      standalone: true
+      filter:
+        - filters/assimilateMetadata #convert author: to author: [name: affiliation:]
+      template: templates/custom.latex
+      base-header-level: 2
+    metadata:
+      documentclass: 'article'
+      classoption: oneside
+      fontsize: '11pt'
+      linestretch: '1.5'
+      geometry: 'margin=1.8cm'
+      mainfont: 'TeX Gyre Termes'
+      mainfontoptions: 'Numbers=OldStyle,Numbers=Proportional' #for xelatex
+      sansfont: 'TeX Gyre Adventor'
+      sansfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
+      monofont: 'Fira Code'
+      mathfont: 'Cambria Math'
+      mathfontoptions: 'math-style=ISO,bold-style=ISO'
+      linkcolor: Mahogany
+      citecolor: Sepia
+      urlcolor: BrickRed
+      nonumberfigures: true
+    postprocessors:
+      - postprocessors/fixLaTeX
+#-----------------------------------------------------------------------------
+  article-tex:
+    extends: [latex]
+#-----------------------------------------------------------------------------
+  article-pdf:
+    extends: [latex,refs]
+    pandoc:
+      to: pdf
+      pdf-engine: 'xelatex'
+#-----------------------------------------------------------------------------
+  letter-pdf:
+    extends: user-info
+    pandoc:
+      from: markdown+raw_tex+simple_tables+escaped_line_breaks
+      to: pdf
+      pdf-engine: xelatex
+      standalone: true
+      template: templates/letter.latex
+    metadata:
+      papersize: letter
+      fontsize: '12pt'
+      linestretch: '1.1'
+      geometry: 'margin=1in'
+      wallpaperXoffset: 1in #usually the same as the margins set in geometry metadata
+      wallpaperYoffset: 1in #usually the same as the margins set in geometry metadata
+      mainfont: 'TeX Gyre Pagella'
+      mainfontoptions: 'Numbers=Proportional'
+      headerfont: 'Open Sans'
+      signature-before: -6ex
+      signature-after: 1ex
+      closing-indentation: 0pt
+      links-as-notes: 
+      linkcolor: Mahogany
+      citecolor: Sepia
+      urlcolor: BrickRed
+#-----------------------------------------------------------------------------
+  letter-UC:
+    extends: letter-pdf
+    metadata:
+      letterhead: "/Users/zvb1/Dropbox/OSX-Links/Home/dot.pandoc/images/UCIDPrimaryBlackRed.pdf"
+      firstpagefooter: "An affirmative action/equal opportunity institution"
+#-----------------------------------------------------------------------------
+  letter-tex:
+    extends: letter-pdf
+    pandoc:
+      from: markdown+raw_tex+simple_tables+escaped_line_breaks
+      to: latex
+#-----------------------------------------------------------------------------
+# https://github.com/Wandmalfarbe/pandoc-latex-template
+  eisvogel:
+    extends: refs
+    preprocessors:
+      - preprocessors/removeImageDimensions #remove image dimensions
+    pandoc:
+      from: markdown
+      to: latex
+      standalone: true
+      filter:
+        - filters/assimilateMetadata #convert author: to author: [name: affiliation:]
+      template: templates/eisvogel-biener.latex
+      toc: true
+      base-header-level: 2
+      listings: true
+    metadata:
+      titlepage: true
+      fontsize: '12pt'
+      linestretch: '1.1'
+      colorlinks: true
+      linkcolor: Mahogany
+      citecolor: Sepia
+      titlepage-color: BB5544
+      titlepage-text-color: FFFFFF
+      titlepage-rule-color: FFFFFF
+      titlepage-rule-height: 4
+      nonumberfigures: true
+      mainfont: 'TeX Gyre Pagella'
+      mainfontoptions: 'Numbers=Proportional'
+      sansfont: 'TeX Gyre Adventor'
+      sansfontoptions: 'Numbers=Proportional'
+      monofont: 'Fira Code'
+      mathfont: 'Cambria Math'
+      mathfontoptions: 'math-style=ISO,bold-style=ISO'
+      urlcolor: BrickRed
+    postprocessors:
+      - postprocessors/fixLaTeX
+#-----------------------------------------------------------------------------
+  report-tex:
+    extends: ['eisvogel']
+    pandoc:
+      toc: false
+      wrap: auto
+    metadata:
+      titlepage: false
+      fontsize: '12pt'
+      linestretch: '1.2'
+      mainfontoptions: 'Numbers=Proportional'
+#-----------------------------------------------------------------------------
+  report-pdf:
+    extends: ['report-tex']
+    pandoc:
+      to: pdf
+      pdf-engine: xelatex
+
+#-----------------------------------------------------------------------------
+  mumford-tex:
+    extends: ['refs']
+    pandoc:
+      to: latex
+      pdf-engine: xelatex
+      template: templates/mumford.latex
+
+#-----------------------------------------------------------------------------
+  mumford-pdf:
+    extends: ['mumford-tex']
+    pandoc:
+      to: pdf
+      pdf-engine: xelatex
+      template: templates/mumford.latex
+
+#-----------------------------------------------------------------------------
+#:::::::::::::::::::::::::::::::::: ZB Styles ::::::::::::::::::::::::::
+#-----------------------------------------------------------------------------
+  jhp:
+    extends: [user-info]
+    pandoc:
+      from: markdown
+      to: latex
+      pdf-engine: pdflatex
+      standalone: true
+      biblatex: true
+      filter:
+      #  - filters/assimilateMetadata #convert author: to author: [name: affiliation:]
+      template: templates/jhp.latex
+      dpi: 300
+      base-header-level: 1
+    metadata:
+      bibliography: "/Users/zvb1/Library/texmf/bibtex/bib/BibDeskLibrary.bib"
+      fontfamily: libertine
+      linestretch: '1.2'
+      biblio-title: References
+      biblio-style: authortitle
+      biblatexoptions: 'natbib,backend=biber,
+        backref=false,
+        hyperref=auto,
+        abbreviate=false,
+        bibencoding=utf8,
+        usetranslator=true,
+        doi=true,
+        isbn=false,
+        eprint=false,
+        citestyle=authoryear,
+        '
+        #citestyle=authortitle,
+        #bibstyle=jhp
+        #customize via cbs, and lbx files.
+        #customize via bbs, and lbx files.
+      lof: false
+      toc: false
+      indent: true
+      fontsize: '11pt'
+      microtypeoptions: 'letterspace=200,tracking=true'
+      geometry: 'right=1.55in, left=1.55in, top=1.4in, bottom=1.4in'
+      classoption: oneside
+      mainfont: 'TeX Gyre Termes'
+      mainfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
+      sansfont: 'TeX Gyre Adventor'
+      sansfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
+      monofont: 'Courier'
+      mathfont: 'Cambria Math'
+      mathfontoptions: 'math-style=ISO,bold-style=ISO'
+      colorlinks: true
+      lang: 'en-US'
+      documentclass: 'article'
+      nonumberfigures: true
+    postprocessors:
+    - 'postprocessors/fixLaTeX'
+    #- 'postprocessors/fixLaTex-ZB'
+
+  article-draft:
+    extends: [jhp]
+    pandoc:
+      template: templates/article-draft.latex
+      standalone: true
+      filter:
+        - pandoc-citeproc #process citations
+      csl: csl/chicago-author-date.csl
+    metadata:
+      classoption: oneside, draft
+      geometry: 'paperheight=9in,paperwidth=5.7in, right=.2in, left=.2in, top=.2in, bottom=.5in'
+      fontfamily: 
+      draft: true
+
+  elsarticle:
+    extends: [latex]
+    metadata:
+      bibliography: "extracted.bib" #using natbib required that the "date" CSL field in the original .bib file be converted to the standard "year" bibtex field. It is easiest to 1) extract from the original bib file only the references used. This is done by the "Create bib file from bbl" file, which uses the bbl file compiled from the first latex run. Then, run a search and replace on ^[\tDate =] and replace them with \tYear =.
+    pandoc:
+      template: templates/elsarticle.latex
+      standalone: true
+      natbib: true
+      base-header-level: 1
+
+
+#-----------------------------------------------------------------------------
+  shps:
+    extends: [refs]
+    pandoc:
+      from: markdown+raw_tex
+      to: latex
+      pdf-engine: pdflatex
+      standalone: true
+      template: templates/shps.latex
+    metadata:
+      biblatexoptions: 'natbib,
+        backend=biber,
+        hyperref=auto,
+        babel=other,
+        abbreviate=false,
+        bibencoding=utf8,
+        usetranslator=true,
+        doi=false,
+        isbn=false,
+        eprint=false,
+        citestyle=chicago-authordate,
+        bibstyle=authoryear,
+        firstinits=true,
+        '
+      lof: false
+      toc: false
+    postprocessors:
+    #- 'postprocessors/fixLaTex-ZB'
+
+
+
+#-----------------------------------------------------------------------------
+#:::::::::::::::::::::::::::::: PRESENTATIONS ::::::::::::::::::::::::::::::::
+#-----------------------------------------------------------------------------
+# Note for reveal.js standalone download the files  and put them
+# in a reveal.js/ folder relative to the markdown file.
+#   wget https://github.com/hakimel/reveal.js/archive/master.tar.gz
+#   tar -xzvf master.tar.gz
+#   mv reveal.js-master reveal.js
+  slides:
+    pandoc:
+      slide-level: 5
+      incremental: true
+  revealjs:
+    extends: [refs, slides]
+    pandoc:
+      from: markdown
+      to: revealjs
+      metadata:   # Some reveal.js options can only be passed to pandoc through the command line. This is how to do it.
+      - "center: false"
+    metadata:
+      revealjs-url: http://lab.hakim.se/reveal-js
+      slideNumber: true
+      progress: true
+      theme: solarized
+      css: /Users/zvb1/.pandoc/templates/revealjs_custom.css
+      minscale: 0.1
+  revealjs-local:
+    extends: [revealjs]
+    metadata:
+      revealjs-url: "/Users/zvb1/.pandoc/reveal.js"
+  revealjs-selfcontained:
+    extends: [revealjs-local]
+    pandoc:
+      self-contained: true
+  powerpoint:
+    extends: [refs, slides]
+    pandoc:
+      from: markdown
+      to: pptx
+  beamer:
+    extends: [refs, slides]
+    pandoc:
+      from: markdown
+      to: beamer
+      use-extension: pdf
+  beamer-modern:
+    extends: [beamer]
+    pandoc:
+      use-extension: pdf
+      pdf-engine: 'xelatex'
+      template: custom/custom-metropolis.latex
+    metadata:
+      theme: metropolis
+      outertheme: miniframes
+      innertheme: circles
+      themeoptions: 
+        - progressbar=frametitle        
+    #postprocessors: ['postprocessors/removeLMODERN'] # NOTE: the lmodern package isn't needed for metropolis theme. This removed it.
+  beamer-modern-tex:
+    extends: [beamer-modern]
+    pandoc:
+      use-extension: tex
+
+
+
+#-----------------------------------------------------------------------------
+#:::::::::::::::::::::::::::::::::: PLAIN:::::::::::::::::::::::::::::::::::::
+#-----------------------------------------------------------------------------
+  plain:
+    pandoc:
+      from: markdown
+      to: plain
+      standalone: true
+      columns: 80
+      filter:
+        - filters/prependAbstract #prepends abstract: metadata into the text
+        - filters/prependAll #prepends institute:, comments: and keywords: metadata into the text
+        - filters/prependAuthor #prepends authors
+#----------------------------------------------------------------------------
+  plain-refs:
+    extends: [refs,plain]
+
+#-----------------------------------------------------------------------------
+#:::::::::::::::::::::::::::::::::: HTML :::::::::::::::::::::::::::::::::::::
+#-----------------------------------------------------------------------------
+  html:
+    pandoc:
+      from: markdown
+      to: html5
+      standalone: true
+      number-sections: false
+      section-divs: true
+      mathjax: true
+      filter:
+        - 'filters/removeHR' #remove horizontal rules
+      template: 'templates/custom.html'
+      css: ['templates/custom.css']
+      dpi: 300
+      toc: true
+      toc-depth: 3
+      base-header-level: 1
+    postprocessors: ['postprocessors/fixHTML']
+#-----------------------------------------------------------------------------
+  html-changes:
+    extends: ['html']
+    preprocessors: ['preprocessors/criticmarkup']
+#-----------------------------------------------------------------------------
+  html-refs:
+    extends: [refs,'html']
+#-----------------------------------------------------------------------------
+  html-endnote:
+    extends: [refs,'html']
+    preprocessors: ['preprocessors/convertEndnoteRefs']
+#-----------------------------------------------------------------------------
+  html-scholar:
+    extends: [refs,'html']
+    preprocessors: ['preprocessors/convertEndnoteRefs']
+    pandoc:
+      template: 'templates/pandoc-scholar.html'
+      css: 'templates/pandoc-scholar.css'
+#-----------------------------------------------------------------------------
+  html-scholar-pdf:
+    extends: ['html-scholar']
+    pandoc:
+      to: pdf
+      pdf-engine: prince
+      pdf-engine-opt: ['--page-size=letter','--page-margin=10mm']
+#-----------------------------------------------------------------------------
+  html-pdf:
+    extends: ['html']
+    pandoc:
+      to: pdf
+      pdf-engine: prince
+      pdf-engine-opt: ['--page-size=A4']
+      toc: true
+#-----------------------------------------------------------------------------
+  html-refs-pdf:
+    extends: [refs,'html']
+    pandoc:
+      to: pdf
+      pdf-engine: prince
+      pdf-engine-opt: ['--page-size=A4']
+#-----------------------------------------------------------------------------
+  html-endnote-pdf:
+    extends: ['html-refs-pdf']
+    preprocessors: ['preprocessors/convertEndnoteRefs']
+#-----------------------------------------------------------------------------
+  html-selfcontained:
+    extends: 'html'
+    pandoc:
+      self-contained: true
+#-----------------------------------------------------------------------------
+  tufte:
+    pandoc:
+      from: markdown+compact_definition_lists
+      to: html5
+      section-divs: true
+      standalone: true
+      filter:
+        - filters/assimilateMetadata # regularise metadata
+        - pandoc-sidenote # brew install jez/formulae/pandoc-sidenote
+      template: 'templates/tufte.html5'
+      css:
+        - 'templates/tufte.css'
+        - 'templates/tuftepandoc.css'
+#-----------------------------------------------------------------------------
+  tufte-refs:
+    extends: [refs,'tufte']
+#-----------------------------------------------------------------------------
+  tufte-refs-pdf:
+    extends: [refs,'tufte']
+    pandoc:
+      to: pdf
+      pdf-engine: prince
+      pdf-engine-opt: ['--page-size=A4']
+#-----------------------------------------------------------------------------
+  docx-refs-not-linked:
+    extends: [docx,refs]
+    metadata:
+      link-citations: false
+#-----------------------------------------------------------------------------
+  docx-endnote:
+    extends: [docx,refs]
+    preprocessors:
+      add: [preprocessors/convertEndnoteRefs] #turns endnote citations to pandoc citations
+#-----------------------------------------------------------------------------
+  docx-changes:
+    extends: [docx,refs]
+    preprocessors: [preprocessors/criticmarkup] #process criticmarkup to HTML that pandoc can use
+#-----------------------------------------------------------------------------
+  odt-refs:
+    extends: [docx,refs]
+    pandoc:
+      to: odt
+      reference-doc: templates/custom.odt
+#-----------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------------
+  latex-endnotes:
+    extends: [latex,refs]
+    preprocessors:
+      - preprocessors/convertEndnoteRefs
+#-----------------------------------------------------------------------------
+  latex-chemfig: # example of using header-includes with yaml block scalar data http://yaml-multiline.info/
+    extends: [latex,refs]
+    metadata:
+      header-includes:
+        - |
+          ```{=latex}
+          \usepackage[]{chemfig}
+          ```
+#-----------------------------------------------------------------------------
+  latex-toc:
+    extends: [latex,refs]
+    pandoc:
+      toc: true
+      toc-depth: 3
+#-----------------------------------------------------------------------------
+  pdf-endnotes:
+    extends: 'latex-endnotes'
+    pandoc:
+      to: pdf
+      pdf-engine: 'xelatex'
+    cleanup: ['latexmk -c']
+#-----------------------------------------------------------------------------
+  latex-with-lof:
+    extends: [latex,refs]
+    pandoc:
+      toc: true
+      toc-depth: 3
+      lof: true
+# https://github.com/Wandmalfarbe/pandoc-latex-template
+  eisvogel-original:
+    extends: 'eisvogel'
+    pandoc:
+      to: pdf
+      pdf-engine: 'xelatex'
+    cleanup: []
+
+#-----------------------------------------------------------------------------
+# https://github.com/Wandmalfarbe/pandoc-latex-template
+  eisvogel-endnote:
+    extends: 'eisvogel'
+    preprocessors:
+      - preprocessors/convertEndnoteRefs
+#-----------------------------------------------------------------------------
+  latex-ieee:
+    extends: [latex,refs]
+    pandoc:
+      template: templates/ieee.latex
+    metadata:
+      fontsize: '10pt'
+#-----------------------------------------------------------------------------
+# https://github.com/pandoc-scholar/pandoc-scholar
+  latex-scholar:
+    extends: [latex,refs]
+    pandoc:
+      template: templates/pandoc-scholar.latex
+    metadata:
+      fontsize: '10pt'
+#-----------------------------------------------------------------------------
+  memoir-with-refs:
+    extends: [latex,refs]
+    pandoc:
+      template: templates/custom-memoir.latex
+      toc: true
+      toc-depth: 3
+      base-header-level: 1
+    metadata:
+      documentclass: 'memoir'
+#-----------------------------------------------------------------------------
+#:::::::::::::::::::::::::::::::::: EPUB :::::::::::::::::::::::::::::::::::::
+#-----------------------------------------------------------------------------
+  epub-test:
+    pandoc:
+      from: markdown
+      to: epub
+      standalone: true
+      self-contained: true
+    metadata:
+      stylesheet: epub.css
+      cover-image: templates/VPMLogoBlack.png
+#-----------------------------------------------------------------------------
+#:::::::::::::::::::::::::::::::::: TEST :::::::::::::::::::::::::::::::::::::
+#-----------------------------------------------------------------------------
+# VARIOUS TEST TEMPLATES
+  test:
+    pandoc:
+      from: markdown
+      to: html5
+      standalone: true
+      css: ['templates/custom.css']
+      self-contained: true
+      mathjax: true
+  test-markdown:
+    pandoc:
+      from: markdown
+      to: markdown
+      output: out.md
+      standalone: true
+      filter: ['filters/testFilter']
+    metadata:
+        author: Joanna Doe

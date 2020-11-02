@@ -16,6 +16,7 @@
 %   return-address : Address of the sender: takes a list to allow a multi-line address.
 %   signature : Image file for a signature.
 %   signature-before, signature-after : Allows adjustment of vertical space surrounding signature.
+%
 
 \PassOptionsToPackage{unicode=true$for(hyperrefoptions)$,$hyperrefoptions$$endfor$}{hyperref} % options for packages loaded elsewhere
 \PassOptionsToPackage{hyphens}{url}
@@ -29,13 +30,14 @@ $if(fontfamily)$
 $else$
 \usepackage{lmodern}
 $endif$
-$if(linestretch)$
 \usepackage{setspace}
+$if(linestretch)$
 \setstretch{$linestretch$}
 $endif$
 \usepackage{amssymb,amsmath}
-\usepackage{iftex}
-\if pdflatex
+\usepackage{tabto}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[$if(fontenc)$$fontenc$$else$T1$endif$]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provides euro and other symbols
@@ -55,6 +57,9 @@ $for(fontfamilies)$
 $endfor$
 $if(mainfont)$
     \setmainfont[$for(mainfontoptions)$$mainfontoptions$$sep$,$endfor$]{$mainfont$}
+$endif$
+$if(romanfont)$
+	\setromanfont[$for(romanfontoptions)$$romanfontoptions$$sep$,$endfor$]{$romanfont$}
 $endif$
 $if(sansfont)$
     \setsansfont[$for(sansfontoptions)$$sansfontoptions$$sep$,$endfor$]{$sansfont$}
@@ -169,7 +174,7 @@ $if(tables)$
 \IfFileExists{footnote.sty}{\usepackage{footnote}\makesavenoteenv{longtable}}{}
 $endif$
 $if(graphics)$
-\usepackage{graphicx}
+\usepackage{graphicx,grffile}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
 \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
@@ -181,7 +186,7 @@ $if(graphics)$
 $endif$
 $if(links-as-notes)$
 % Make links footnotes instead of hotlinks:
-\DeclareRobustCommand{\href}[2]{#2\footnote{\url{#1}}}
+%\DeclareRobustCommand{\href}[2]{#2\footnote{\url{#1}}}
 $endif$
 $if(strikeout)$
 \usepackage[normalem]{ulem}
@@ -215,16 +220,16 @@ $endif$
 \makeatother
 
 $if(signature)$
-\usepackage{graphicx}
-\signature{$if(signature-before)$\vspace*{$signature-before$}$endif$\includegraphics$if(signature-width)$[width=$signature-width$]$endif${$signature$}$if(author)$\\$if(signature-after)$\vspace*{$signature-after$}$endif$$for(author)$$author$$sep$\\$endfor$$endif$}
+\usepackage{graphicx,grffile}
+\signature{$if(signature-before)$\vspace*{$signature-before$}$endif$\includegraphics$if(signature-width)$[width=$signature-width$]$endif${$signature$}$if(author)$\\$if(signature-after)$\vspace*{$signature-after$}$endif$$for(author)$$author.name$$sep$\\$endfor$\\$if(author.jobtitle)$$for(author.jobtitle)$$author.jobtitle$$sep$\\$endfor$$endif$$endif$\vspace*{4ex}}
 $else$
 $if(author)$
-\signature{$for(author)$$author$$sep$\\$endfor$}
+\signature{$for(author)$$author.name$$sep$\\$endfor$\\\\$if(author.jobtitle)$$for(author.jobtitle)$$author.jobtitle$$sep$\\$endfor$$endif$\vspace*{4ex}}
 $endif$
 $endif$
 
 $if(date)$
-\date{$date$}
+\date{$if(headerfont)$\fontspec{$headerfont$}$endif$$date$}
 $endif$
 
 $for(header-includes)$
@@ -262,8 +267,8 @@ $if(dir)$
   \newenvironment{LTR}{\beginL}{\endL}
 \fi
 $endif$
-
-\address{$for(return-address)$\footnotesize{$return-address$}$sep$\\$endfor$}
+$if(headerfont)$\fontspec{$headerfont$}$endif$
+\address{$for(return-address)$$if(headerfont)$\fontspec{$headerfont$}$endif$$return-address$$sep$\\$endfor$\\$for(correspondence)$$if(headerfont)$\fontspec{$headerfont$}$endif$$correspondence$$sep$\\$endfor$\\$for(phone)$$if(headerfont)$\fontspec{$headerfont$}$endif$$phone$$sep$\\$endfor$}
 
 $if(blockquote)$
 \usepackage{mdframed} % color is loaded by mdframed
@@ -274,12 +279,62 @@ $if(blockquote)$
 \item\relax\color{greytext}\ignorespaces}{\unskip\unskip\endlist\end{blockquote}}
 $endif$
 
+
+
 $if(letterhead)$
 \usepackage{wallpaper}
-\ThisULCornerWallPaper{1}{$letterhead$}
+\renewcommand{\ThisULCornerWallPaper}[2]{%
+  \AddToShipoutPicture*{\put(\LenToUnit{\wpXoffset},\LenToUnit{-\wpYoffset}){%
+      \parbox[b][\paperheight]{#1\paperwidth}{%       
+        \includegraphics[width=#1\paperwidth,height=#1\paperheight,%
+        keepaspectratio]{#2}%
+        \vfill%
+      }
+    }
+  }
+}
+$if(wallpaperXoffset)$
+\setlength{\wpXoffset}{$wallpaperXoffset$}
+$endif$
+$if(wallpaperYoffset)$
+\setlength{\wpYoffset}{$wallpaperYoffset$}
+$endif$
+\ThisULCornerWallPaper{.3}{$letterhead$}
+$endif$
+
+%Letter class vertically centers text on the first page. The following code removes that.
+\makeatletter
+  \def\@texttop{}
+\makeatother
+
+%Letter class vertically centers text on the first page. The following code removes that.
+
+\makeatletter
+\renewcommand*{\cc}[1]{%
+  \par\noindent
+  \parbox[t]{\textwidth}{%
+    \@hangfrom{\normalsize\ccname: }%
+    \ignorespaces #1\strut}\par}
+
+\renewcommand*{\encl}[1]{%
+  \par\noindent
+  \parbox[t]{\textwidth}{%
+    \@hangfrom{\normalsize\enclname: }%
+    \ignorespaces #1\strut}\par}
+\makeatother
+
+
+%Add custom UC footer
+$if(firstpagefooter)$
+\makeatletter
+\def\ps@firstpage{\def\@oddhead{}\def\@oddfoot{$if(headerfont)$\fontspec{$headerfont$}$endif$\normalsize\hfil\textit{$firstpagefooter$}\hfil}\def\@evenhead{}\let\@evenfoot\@oddfoot}
+\makeatother
 $endif$
 
 \begin{document}
+
+
+
 \setstretch{1}
 $for(include-before)$
 $include-before$
@@ -293,12 +348,14 @@ $endif$
 \tableofcontents
 }
 $endif$
-
-
-\begin{letter}{$for(address)$$address$$sep$\\$endfor$$if(subject)$\\ ~ \\$subject$$endif$}
+\begin{letter}{$for(address)$$address$$sep$\\$endfor$}
 \opening{$opening$}
 $if(linestretch)$
 \setstretch{$linestretch$}
+$endif$
+\thispagestyle{firstpage}
+$if(bodyfont)$
+\fontspec{$bodyfont$}
 $endif$
 $body$
 \setstretch{1}

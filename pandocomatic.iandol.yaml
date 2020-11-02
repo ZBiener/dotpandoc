@@ -10,34 +10,6 @@ settings:
 #-----------------------------------------------------------------------------
 templates:
 #-----------------------------------------------------------------------------
-#:::::::::::::::::::::::::::::::::: User Info ::::::::::::::::::::::::::
-#-----------------------------------------------------------------------------
-  user-info:
-    metadata:
-      bibliography: "/Users/zvb1/Library/texmf/bibtex/bib/BibDeskLibrary.json" #converted from the bib format, just for CSL use.
-      author: 
-        name: Zvi Biener
-        jobtitle:
-          - Associate Professor
-          #- Department of Philosophy
-          - Editor-in-Chief, *PhilSci-Archive*
-        affiliation: University of Cincinnati
-      correspondence: \href{mailto:zvi.biener@uc.edu}{zvi.biener@uc.edu}
-      phone: 513-818-2984
-      institute: University of Cincinnati
-      closing: Sincerely,
-      return-address:
-        - "**Department of Philosophy**"
-        - "**Arts & Sciences**"
-        - ML 0374
-        - University of Cincinnati
-        - Cincinnati OH 45221-0374
-      signature: "/Users/zvb1/.pandoc/images/ZBsignature.pdf"
-      created: "<$createdDate>"
-      compiled: "<$fulldate> @ <$fulltime>"
-      wordcount: <$wc>
-      lang: 'en-US'
-#-----------------------------------------------------------------------------
 #:::::::::::::::::::::::::::::::::: GENERAL ::::::::::::::::::::::::::::::::::
 #-----------------------------------------------------------------------------
   crossref: # note crossref should come before citeproc!
@@ -55,14 +27,14 @@ templates:
     cleanup: []
 #-----------------------------------------------------------------------------
   refs:
-    extends: [user-info]
     pandoc:
       standalone: true
       verbose: true # verbose by default
       citeproc: true
       lua-filter:
         - filters/pagebreak.lua # use \newpage{} also for HTML and docx
-      csl: csl/chicago-author-date.csl
+      bibliography: Core.json #JSON faster than BIB, symlinked to Pandoc data dir
+      csl: csl/cell-doi.csl
       citation-abbreviations: cite-abbr.json # my journal abbreviations
       reference-links: true
     metadata:
@@ -76,6 +48,7 @@ templates:
     pandoc:
       from: markdown
       to: plain
+      template: templates/custom.plain
       standalone: true
       verbose: true
       wrap: auto
@@ -141,12 +114,6 @@ templates:
       to: odt
       reference-doc: templates/custom.odt
 #-----------------------------------------------------------------------------
-  docx-letterhead:
-    extends: [docx,refs]
-    pandoc:
-      reference-doc: templates/custom/UC_Letterhead.docx
-
-#-----------------------------------------------------------------------------
 #:::::::::::::::::::::::::::::: PRESENTATIONS ::::::::::::::::::::::::::::::::
 #-----------------------------------------------------------------------------
 # Note for reveal.js standalone download the files  and put them 
@@ -165,10 +132,6 @@ templates:
       slideNumber: true
       transition: fade # none/fade/slide/convex/concave/zoom
       transitionSpeed: default # default/fast/slow
-      progress: true
-      theme: solarized
-      css: /templates/revealjs_custom.css
-      minscale: 0.1
   revealjs-local:
     extends: [revealjs]
     metadata:
@@ -189,24 +152,22 @@ templates:
     preprocessors:
       - preprocessors/removeImageDimensions.rb # remove image dimensions
     pandoc:
-      from: markdown+raw_tex
+      from: markdown
       to: latex
-      #pdf-engine: xelatex #Why did I have this here before?
       standalone: true
       filter: 
         - filters/assimilateMetadata.rb # handle academic metadata
       template: templates/custom.latex
-      #base-header-level: 2
     metadata:
       documentclass: 'article'
-      classoption: oneside
+      classoption: twoside
       pagestyle: plain # control \pagestyle{}: the default article class supports plain (default), empty (no running heads or page numbers), and headings (section titles in running heads)
-      fontsize: '11pt'
+      fontsize: '12pt'
       linestretch: '1.5'
-      geometry: ['inner=2.2cm','outer=1.8cm','bottom=2.5cm']
-      mainfont: 'TeX Gyre Termes'
+      geometry: ['inner=2.2cm','outer=1.8cm','bottom=2.5cm','twoside']
+      mainfont: 'Greta Text Pro'
       mainfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
-      sansfont: 'TeX Gyre Adventor'
+      sansfont: 'Greta Sans Pro'
       sansfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
       monofont: 'Fira Code'
       mathfont: 'Cambria Math'
@@ -297,7 +258,6 @@ templates:
 #   signature : Image file for a signature.
 #   signature-before, signature-after : Allows adjustment of vertical space surrounding signature.
   latex-letter:
-    extends: [user-info]
     pandoc:
       from: markdown
       to: latex
@@ -305,18 +265,27 @@ templates:
       standalone: true
       template: templates/letter.latex
     metadata:
-      papersize: letter
-      #author: 'Ian Max Andolina Ph.D.\newline Director, Cognition \& Behaviour Platform'
+      papersize: a4
+      return-address: 
+        - Cognition \& Behaviour Platform
+        - Institute of Neuroscience, CAS
+        - Room 307, Systems Building
+        - 320 Yueyang Rd, Shanghai 200031, CHINA
+        - ✉ <i.andolina@ion.ac.cn>
+        - ✆ +86 021 54921747
+      author: 'Ian Max Andolina Ph.D.\newline Director, Cognition \& Behaviour Platform'
       opening: To whom it may concern,
-      closing: Sincerely,
-      mainfont: 'TeX Gyre Pagella'
-      mainfontoptions: 'Numbers=Proportional'
+      closing: Sincerely yours,
+      mainfont: 'Graublau Sans'
+      mainfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
       monofont: 'Fira Code'
       mathfont: 'Cambria Math'
       mathfontoptions: 'math-style=ISO,bold-style=ISO'
       CJKmainfont: 'PingFang SC'
-      fontsize: '12pt'
-      linestretch: '1.1'
+      fontsize: '11pt'
+      linestretch: '1.2'
+      letterhead: "/Users/ian/Dropbox/Work/ION-Letterhead.pdf"
+      signature: "/Users/ian/Dropbox/Work/Ian-Signature.png"
       signature-width: 45mm
       signature-before: -11ex
       signature-after: -1.5ex
@@ -326,31 +295,10 @@ templates:
       linkcolor: Mahogany
       citecolor: Sepia
       urlcolor: BrickRed
+      lang: 'en-GB'
       geometry: ['margin=1.5cm','top=2.1cm']
     postprocessors: 
       - postprocessors/fixLaTeX.rb
-#-----------------------------------------------------------------------------
-  letter-UC:
-    extends: [latex-letter, user-info]
-    pandoc:
-      from: markdown+raw_tex+simple_tables+escaped_line_breaks
-      to: pdf
-      pdf-engine: xelatex
-      standalone: true
-      template: templates/custom/letter.latex
-    metadata:
-      linestretch: '1.1'
-      geometry: 'margin=1in'
-      letterhead: "/Users/zvb1/.pandoc/images/UCIDPrimaryBlackRed.pdf"
-      wallpaperXoffset: 1in #usually the same as the margins set in geometry metadata
-      wallpaperYoffset: 1in #usually the same as the margins set in geometry metadata
-      headerfont: 'Open Sans'
-      signature-before: -6ex
-      signature-after: 1ex
-      signature-width: 70mm
-      closing-indentation: 0pt
-      firstpagefooter: "An affirmative action/equal opportunity institution"
-
 #-----------------------------------------------------------------------------
   pdf-refs:
     extends: [latex-refs]
@@ -400,9 +348,9 @@ templates:
       float-placement-figure: H
       #logo: "/Users/ian/Dropbox/Images/Logos/Platform-ION-Banner-White.png"
       #logo-width: 350
-      mainfont: 'TeX Gyre Pagella'
+      mainfont: 'Greta Sans Pro'
       mainfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
-      sansfont: 'TeX Gyre Adventor'
+      sansfont: 'Graublau Slab'
       sansfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
       monofont: 'Fira Code'
       mathfont: 'Cambria Math'
@@ -416,6 +364,7 @@ templates:
       citecolor: Sepia
       urlcolor: BrickRed
       nonumberfigures: true
+      lang: 'en-GB'
       disable-header-and-footer: false
       header-right:
       header-left:
@@ -427,17 +376,6 @@ templates:
       footnotes-disable-backlinks: false
     postprocessors: 
       - postprocessors/fixLaTeX.rb
-#-----------------------------------------------------------------------------
-  report-tex:
-    extends: ['eisvogel']
-    pandoc:
-      toc: false
-      wrap: auto
-    metadata:
-      titlepage: false
-      fontsize: '12pt'
-      linestretch: '1.2'
-      mainfontoptions: 'Numbers=Proportional'
 #-----------------------------------------------------------------------------
 # https://github.com/Wandmalfarbe/pandoc-latex-template
   eisvogel-logo:
@@ -503,50 +441,6 @@ templates:
       base-header-level: 1
     metadata:
       documentclass: 'memoir'
-#-----------------------------------------------------------------------------
-  mumford-tex:
-    extends: ['refs']
-    pandoc:
-      to: latex
-      pdf-engine: xelatex
-      template: templates/custom/mumford.latex
-
-#-----------------------------------------------------------------------------
-  mumford-pdf:
-    extends: ['mumford-tex']
-    pandoc:
-      to: pdf
-      pdf-engine: xelatex
-      template: templates/custom/mumford.latex
-
-#-----------------------------------------------------------------------------
-  slides:
-    pandoc:
-      slide-level: 5
-      incremental: true
-  beamer:
-    extends: [refs, slides]
-    pandoc:
-      from: markdown
-      to: beamer
-      use-extension: pdf
-  beamer-modern:
-    extends: [beamer]
-    pandoc:
-      use-extension: pdf
-      pdf-engine: 'xelatex'
-      template: templates/custom/custom-metropolis.latex
-    metadata:
-      theme: metropolis
-      outertheme: miniframes
-      innertheme: circles
-      themeoptions: 
-        - progressbar=frametitle        
-    #postprocessors: ['postprocessors/removeLMODERN'] # NOTE: the lmodern package isn't needed for metropolis theme. This removed it.
-  beamer-modern-tex:
-    extends: [beamer-modern]
-    pandoc:
-      use-extension: tex
 #-----------------------------------------------------------------------------
 #:::::::::::::::::::::::::::::::::: HTML :::::::::::::::::::::::::::::::::::::
 #-----------------------------------------------------------------------------
@@ -685,118 +579,3 @@ templates:
         - filters/testFilter.rb
     metadata:
       #author: Joanna Doe
-
-
-#-----------------------------------------------------------------------------
-#:::::::::::::::::::::::::::::::::: ZB Styles ::::::::::::::::::::::::::
-#-----------------------------------------------------------------------------
-  jhp:
-    extends: [user-info]
-    pandoc:
-      from: markdown
-      to: latex
-      pdf-engine: pdflatex
-      standalone: true
-      biblatex: true
-      filter:
-      #  - filters/assimilateMetadata.rb #convert author: to author: [name: affiliation:]
-      template: templates/custom/jhp.latex
-      dpi: 300
-      base-header-level: 1
-    metadata:
-      bibliography: "/Users/zvb1/Library/texmf/bibtex/bib/BibDeskLibrary.bib"
-      fontfamily: libertine
-      linestretch: '1.2'
-      biblio-title: References
-      biblio-style: authortitle
-      biblatexoptions: 'natbib,backend=biber,
-        backref=false,
-        hyperref=auto,
-        abbreviate=false,
-        bibencoding=utf8,
-        usetranslator=true,
-        doi=true,
-        isbn=false,
-        eprint=false,
-        citestyle=authoryear,
-        '
-        #citestyle=authortitle,
-        #bibstyle=jhp
-        #customize via cbs, and lbx files.
-        #customize via bbs, and lbx files.
-      lof: false
-      toc: false
-      indent: true
-      fontsize: '11pt'
-      microtypeoptions: 'letterspace=200,tracking=true'
-      geometry: 'right=1.55in, left=1.55in, top=1.4in, bottom=1.4in'
-      classoption: oneside
-      mainfont: 'TeX Gyre Termes'
-      mainfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
-      sansfont: 'TeX Gyre Adventor'
-      sansfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
-      monofont: 'Courier'
-      mathfont: 'Cambria Math'
-      mathfontoptions: 'math-style=ISO,bold-style=ISO'
-      colorlinks: true
-      lang: 'en-US'
-      documentclass: 'article'
-      nonumberfigures: true
-    postprocessors:
-    - 'postprocessors/fixLaTeX.rb'
-    #- 'postprocessors/fixLaTeX.rb-ZB'
-
-  article-draft:
-    extends: [jhp]
-    pandoc:
-      template: templates/custom/article-draft.latex
-      standalone: true
-      filter:
-        - pandoc-citeproc #process citations
-      csl: csl/chicago-author-date.csl
-    metadata:
-      classoption: oneside, draft
-      geometry: 'paperheight=9in,paperwidth=5.7in, right=.2in, left=.2in, top=.2in, bottom=.5in'
-      fontfamily: 
-      draft: true
-
-  elsarticle:
-    extends: [latex]
-    metadata:
-      bibliography: "extracted.bib" #using natbib required that the "date" CSL field in the original .bib file be converted to the standard "year" bibtex field. It is easiest to 1) extract from the original bib file only the references used. This is done by the "Create bib file from bbl" file, which uses the bbl file compiled from the first latex run. Then, run a search and replace on ^[\tDate =] and replace them with \tYear =.
-    pandoc:
-      template: templates/custom/elsarticle.latex
-      standalone: true
-      natbib: true
-      base-header-level: 1
-
-
-#-----------------------------------------------------------------------------
-  shps:
-    extends: [refs]
-    pandoc:
-      from: markdown+raw_tex
-      to: latex
-      pdf-engine: pdflatex
-      standalone: true
-      template: templates/custom/shps.latex
-    metadata:
-      biblatexoptions: 'natbib,
-        backend=biber,
-        hyperref=auto,
-        babel=other,
-        abbreviate=false,
-        bibencoding=utf8,
-        usetranslator=true,
-        doi=false,
-        isbn=false,
-        eprint=false,
-        citestyle=chicago-authordate,
-        bibstyle=authoryear,
-        firstinits=true,
-        '
-      lof: false
-      toc: false
-    postprocessors:
-    #- 'postprocessors/fixLaTeX.rb-ZB'
-
