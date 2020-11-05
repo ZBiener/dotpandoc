@@ -46,7 +46,7 @@ templates:
       - preprocessors/fixCrossref.rb #allows to put crossref labels in styled captions
     pandoc:
       standalone: true
-      verbose: true # verbose by default
+      verbose: false # verbose by default
       filter: 
         - pandoc-crossref # process crossrefs
     metadata:
@@ -58,10 +58,10 @@ templates:
     extends: [user-info]
     pandoc:
       standalone: true
-      verbose: true # verbose by default
+      verbose: false # verbose by default
       citeproc: true
-      lua-filter:
-        - filters/pagebreak.lua # use \newpage{} also for HTML and docx
+      #lua-filter:
+      #  - filters/pagebreak.lua # use \newpage{} also for HTML and docx
       csl: csl/chicago-author-date.csl
       citation-abbreviations: cite-abbr.json # my journal abbreviations
       reference-links: true
@@ -160,19 +160,20 @@ templates:
       from: markdown
       to: revealjs
       toc: true
+      css: templates/custom/revealjs_custom.css
+      plugins: ["menu", "chalkboard"]
     metadata:
-      revealjs-url: http://lab.hakim.se/reveal-js
+      revealjs-url: https://unpkg.com/reveal.js@3.9.2/
       slideNumber: true
       transition: fade # none/fade/slide/convex/concave/zoom
       transitionSpeed: default # default/fast/slow
       progress: true
       theme: solarized
-      css: /templates/revealjs_custom.css
       minscale: 0.1
   revealjs-local:
     extends: [revealjs]
     metadata:
-      revealjs-url: ./reveal.js
+      revealjs-url: /Users/zvb1/.pandoc/reveal.js
   revealjs-selfcontained:
     extends: [revealjs-local]
     pandoc:
@@ -384,10 +385,11 @@ templates:
       standalone: true
       filter: 
         - filters/assimilateMetadata.rb # handle academic matadata
-      template: templates/eisvogel.latex
+      template: templates/custom/eisvogel.latex
       toc: true
       shift-heading-level-by: 1
     metadata: 
+      papersize: letter
       book: false 
       titlepage: true
       titlepage-color: BB4433
@@ -438,6 +440,12 @@ templates:
       fontsize: '12pt'
       linestretch: '1.2'
       mainfontoptions: 'Numbers=Proportional'
+#-----------------------------------------------------------------------------
+  report-pdf:
+    extends: ['report-tex']
+    pandoc:
+      to: pdf
+      pdf-engine: xelatex
 #-----------------------------------------------------------------------------
 # https://github.com/Wandmalfarbe/pandoc-latex-template
   eisvogel-logo:
@@ -517,6 +525,7 @@ templates:
     pandoc:
       to: pdf
       pdf-engine: xelatex
+      standalone: true
       template: templates/custom/mumford.latex
 
 #-----------------------------------------------------------------------------
@@ -535,7 +544,7 @@ templates:
     pandoc:
       use-extension: pdf
       pdf-engine: 'xelatex'
-      template: templates/custom/custom-metropolis.latex
+      template: templates/custom/metropolis.latex
     metadata:
       theme: metropolis
       outertheme: miniframes
@@ -602,14 +611,14 @@ templates:
     pandoc:
       to: pdf
       pdf-engine: prince
-      pdf-engine-opt: ['--page-size=A4','--page-margin=10mm']
+      pdf-engine-opt: ['--page-size=paper','--page-margin=10mm']
 #-----------------------------------------------------------------------------
   html-pdf:
     extends: [html]
     pandoc:
       to: pdf
       pdf-engine: prince
-      pdf-engine-opt: ['--page-size=A4']
+      pdf-engine-opt: ['--page-size=paper']
       toc: true
 #-----------------------------------------------------------------------------
   html-refs-pdf:
@@ -636,7 +645,7 @@ templates:
         - 'templates/tufte.css'
         - 'templates/tuftepandoc.css'
     metadata:
-      lang: 'en-GB'
+      lang: 'en-US'
 #-----------------------------------------------------------------------------
   tufte-refs:
     extends: [refs,tufte,crossref]
@@ -646,7 +655,7 @@ templates:
     pandoc:
       to: pdf
       pdf-engine: prince
-      pdf-engine-opt: ['--page-size=A4']
+      pdf-engine-opt: ['--page-size=paper']
 #-----------------------------------------------------------------------------
 #:::::::::::::::::::::::::::::::::: EPUB :::::::::::::::::::::::::::::::::::::
 #-----------------------------------------------------------------------------
