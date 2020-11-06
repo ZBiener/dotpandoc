@@ -145,8 +145,13 @@ $else$
 \setstretch{1.2}
 $endif$
 \usepackage{amsmath}
+<<<<<<< HEAD
 \usepackage{ifxetex,ifluatex}
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+=======
+\usepackage{iftex}
+\ifPDFTeX % if pdftex
+>>>>>>> master
   \usepackage[$if(fontenc)$$fontenc$$else$T1$endif$]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
