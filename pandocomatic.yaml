@@ -15,16 +15,16 @@ templates:
   user-info:
     metadata:
       bibliography: "/Users/zvb1/Library/texmf/bibtex/bib/BibDeskLibrary.json" #converted from the bib format, just for CSL use.
-      author: 
-        name: Zvi Biener
-        jobtitle:
-          - Associate Professor
-          #- Department of Philosophy
-          - Editor-in-Chief, *PhilSci-Archive*
-        affiliation: University of Cincinnati
-      correspondence: \href{mailto:zvi.biener@uc.edu}{zvi.biener@uc.edu}
+      author: Zvi Biener
+      jobtitle:
+      affiliation: University of Cincinnati
+      #author:
+      #  - name: Zvi Biener
+      #    afilliation: [1]
+      #    correspondence: zvi.biener@uc.edu
+      #institute:
+      #  - 1: University of Cincinnati
       phone: 513-818-2984
-      institute: University of Cincinnati
       closing: Sincerely,
       return-address:
         - "**Department of Philosophy**"
@@ -58,7 +58,7 @@ templates:
     extends: [user-info]
     pandoc:
       standalone: true
-      verbose: false # verbose by default
+      verbose: true # verbose by default
       citeproc: true
       #lua-filter:
       #  - filters/pagebreak.lua # use \newpage{} also for HTML and docx
@@ -141,7 +141,7 @@ templates:
       to: odt
       reference-doc: templates/custom.odt
 #-----------------------------------------------------------------------------
-  docx-letterhead:
+  docx-UC:
     extends: [docx,refs]
     pandoc:
       reference-doc: templates/custom/UC_Letterhead.docx
@@ -160,20 +160,23 @@ templates:
       from: markdown
       to: revealjs
       toc: true
+      template: /Users/zvb1/.pandoc/templates/custom/revealjs.html
       css: templates/custom/revealjs_custom.css
-      plugins: ["menu", "chalkboard"]
+      #filter:
+      #  - filters/simplifyMetadata.rb #prepends abstract: metadata into the text
     metadata:
       revealjs-url: https://unpkg.com/reveal.js@3.9.2/
       slideNumber: true
       transition: fade # none/fade/slide/convex/concave/zoom
       transitionSpeed: default # default/fast/slow
       progress: true
-      theme: solarized
+      theme: sky
+      numbers: true
       minscale: 0.1
   revealjs-local:
     extends: [revealjs]
     metadata:
-      revealjs-url: /Users/zvb1/.pandoc/reveal.js
+      revealjs-url: /Users/zvb1/Programming/reveal.js
   revealjs-selfcontained:
     extends: [revealjs-local]
     pandoc:
@@ -335,7 +338,7 @@ templates:
     extends: [latex-letter, user-info]
     pandoc:
       from: markdown+raw_tex+simple_tables+escaped_line_breaks
-      to: pdf
+      to: latex
       pdf-engine: xelatex
       standalone: true
       template: templates/custom/letter.latex
@@ -531,7 +534,7 @@ templates:
 #-----------------------------------------------------------------------------
   slides:
     pandoc:
-      slide-level: 5
+      #slide-level: 1
       incremental: true
   beamer:
     extends: [refs, slides]
