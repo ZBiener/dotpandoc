@@ -141,7 +141,7 @@ $endfor$
 
 
 $if(title)$\title{$title$}$endif$
-$if(author)$\author{$author.name$\thanks{$if(thanks)$$thanks$$endif$} }$endif$
+$if(author)$\author{$author$\thanks{$if(thanks)$$thanks$$endif$} }$endif$
 \date{\today}
 
 

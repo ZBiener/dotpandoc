@@ -16,7 +16,7 @@ templates:
     metadata:
       bibliography: "/Users/zvb1/Library/texmf/bibtex/bib/BibDeskLibrary.json" #converted from the bib format, just for CSL use.
       author: Zvi Biener
-      jobtitle:
+      jobtitle: Associate Professor
       affiliation: University of Cincinnati
       #author:
       #  - name: Zvi Biener

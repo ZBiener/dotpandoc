@@ -216,7 +216,7 @@ $endif$
 
 $if(signature)$
 \usepackage{graphicx}
-\signature{$if(signature-before)$\vspace*{$signature-before$}$endif$\includegraphics$if(signature-width)$[width=$signature-width$]$endif${$signature$}$if(author)$\\$if(signature-after)$\vspace*{$signature-after$}$endif$$for(author)$$author.name$$sep$\\$endfor$\\$if(author.jobtitle)$$for(author.jobtitle)$$author.jobtitle$$sep$\\$endfor$$endif$$endif$\vspace*{4ex}}
+\signature{$if(signature-before)$\vspace*{$signature-before$}$endif$\includegraphics$if(signature-width)$[width=$signature-width$]$endif${$signature$}$if(author)$\\$if(signature-after)$\vspace*{$signature-after$}$endif$$for(author)$$author$$sep$\\$endfor$\\$if(jobtitle)$$for(jobtitle)$$jobtitle$$sep$\\$endfor$$endif$$endif$\vspace*{4ex}}
 $else$
 $if(author)$
 \signature{$for(author)$$author.name$$sep$\\$endfor$\\\\$if(author.jobtitle)$$for(author.jobtitle)$$author.jobtitle$$sep$\\$endfor$$endif$\vspace*{4ex}}
@@ -279,7 +279,6 @@ $endif$
 $if(letterhead)$
 \usepackage{wallpaper}
 \renewcommand{\ThisULCornerWallPaper}[2]{%
-\ThisULCornerWallPaper{1}{$letterhead$}
   \AddToShipoutPicture*{\put(\LenToUnit{\wpXoffset},\LenToUnit{-\wpYoffset}){%
       \parbox[b][\paperheight]{#1\paperwidth}{%       
         \includegraphics[width=#1\paperwidth,height=#1\paperheight,%
