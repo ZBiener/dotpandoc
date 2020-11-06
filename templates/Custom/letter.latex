@@ -276,8 +276,6 @@ $if(blockquote)$
 \item\relax\color{greytext}\ignorespaces}{\unskip\unskip\endlist\end{blockquote}}
 $endif$
 
-
-
 $if(letterhead)$
 \usepackage{wallpaper}
 \ThisULCornerWallPaper{1}{$letterhead$}
