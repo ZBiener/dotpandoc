@@ -278,6 +278,7 @@ $endif$
 
 $if(letterhead)$
 \usepackage{wallpaper}
+\renewcommand{\ThisULCornerWallPaper}[2]{%
 \ThisULCornerWallPaper{1}{$letterhead$}
   \AddToShipoutPicture*{\put(\LenToUnit{\wpXoffset},\LenToUnit{-\wpYoffset}){%
       \parbox[b][\paperheight]{#1\paperwidth}{%       
