@@ -3,6 +3,7 @@
 %%
 % Copyright (c) 2018, Pascal Wagler;  
 % Copyright (c) 2014--2018, John MacFarlane
+% some ZB changes
 % 
 % All rights reserved.
 % 
@@ -256,7 +257,6 @@ $else$
 \usepackage[margin=2.5cm,includehead=true,includefoot=true,centering]{geometry}
 $endif$
 $if(logo)$
-\usepackage[export]{adjustbox}
 \usepackage{graphicx}
 $endif$
 $if(beamer)$
@@ -286,6 +286,7 @@ $else$
 $endif$
 $endif$
 $if(graphics)$
+\usepackage[export]{adjustbox}
 \usepackage{graphicx,grffile}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
