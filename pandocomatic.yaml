@@ -18,6 +18,7 @@ templates:
       author: Zvi Biener
       jobtitle: Associate Professor
       affiliation: University of Cincinnati
+      correspondence: zvi.biener@uc.edu
       #author:
       #  - name: Zvi Biener
       #    afilliation: [1]
@@ -354,7 +355,11 @@ templates:
       signature-width: 70mm
       closing-indentation: 0pt
       firstpagefooter: "An affirmative action/equal opportunity institution"
-
+#-----------------------------------------------------------------------------
+  letter-UC-pdf:
+    extends: letter-UC
+    pandoc:
+      to: pdf
 #-----------------------------------------------------------------------------
   pdf-refs:
     extends: [latex-refs]

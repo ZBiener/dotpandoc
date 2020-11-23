@@ -262,10 +262,9 @@ $if(dir)$
   \newenvironment{LTR}{\beginL}{\endL}
 \fi
 $endif$
-$if(headerfont)$\fontspec{$headerfont$}$endif$
-\address{$for(return-address)$$if(headerfont)$\fontspec{$headerfont$}$endif$$return-address$$sep$\\$endfor$\\$for(correspondence)$$if(headerfont)$\fontspec{$headerfont$}$endif$$correspondence$$sep$\\$endfor$\\$for(phone)$$if(headerfont)$\fontspec{$headerfont$}$endif$$phone$$sep$\\$endfor$}
 
-\address{$for(return-address)$\footnotesize{$return-address$}$sep$\\$endfor$}
+\address{\\$for(return-address)$$if(headerfont)$\fontspec{$headerfont$}$endif$$return-address$$sep$\\$endfor$\\$for(correspondence)$$if(headerfont)$\fontspec{$headerfont$}$endif$$correspondence$$sep$\\$endfor$\\$for(phone)$$if(headerfont)$\fontspec{$headerfont$}$endif$$phone$$sep$\\$endfor$}
+
 
 $if(blockquote)$
 \usepackage{mdframed} % color is loaded by mdframed
