@@ -14,7 +14,6 @@ templates:
 #-----------------------------------------------------------------------------
   user-info:
     metadata:
-      bibliography: "/Users/zvb1/Library/texmf/bibtex/bib/BibDeskLibrary.json" #converted from the bib format, just for CSL use.
       author: Zvi Biener
       jobtitle: Associate Professor
       affiliation: University of Cincinnati
@@ -47,9 +46,7 @@ templates:
       - preprocessors/fixCrossref.rb #allows to put crossref labels in styled captions
     pandoc:
       standalone: true
-      verbose: false # verbose by default
-      filter: 
-        - pandoc-crossref # process crossrefs
+      verbose: true # verbose by default
     metadata:
       linkReferences: true
     postprocessors: []
@@ -67,7 +64,7 @@ templates:
       citation-abbreviations: cite-abbr.json # my journal abbreviations
       reference-links: true
     metadata:
-      cite-method: citeproc
+      bibliography: "/Users/zvb1/Library/texmf/bibtex/bib/BibDeskLibrary.json" #converted from the bib format, just for CSL use.
       reference-section-title: References
       notes-after-punctuation: false
       link-citations: true 
@@ -393,7 +390,7 @@ templates:
       standalone: true
       filter: 
         - filters/assimilateMetadata.rb # handle academic matadata
-      template: templates/custom/eisvogel.latex
+      template: templates/eisvogel.latex
       toc: true
       shift-heading-level-by: 1
     metadata: 
@@ -453,7 +450,6 @@ templates:
     extends: ['report-tex']
     pandoc:
       to: pdf
-      pdf-engine: xelatex
 #-----------------------------------------------------------------------------
 # https://github.com/Wandmalfarbe/pandoc-latex-template
   eisvogel-logo:
@@ -535,6 +531,23 @@ templates:
       pdf-engine: xelatex
       standalone: true
       template: templates/custom/mumford.latex
+
+#-----------------------------------------------------------------------------
+  syllabus-tex:
+    extends: ['refs']
+    pandoc:
+      from: markdown+multiline_tables
+      to: latex
+      standalone: true
+      template: templates/custom/syllabus.latex   
+
+#-----------------------------------------------------------------------------
+  syllabus-pdf:
+    extends: ['syllabus-tex']
+    pandoc:
+      to: pdf
+      pdf-engine: xelatex
+
 
 #-----------------------------------------------------------------------------
   slides:
@@ -637,6 +650,13 @@ templates:
     preprocessors: 
       - preprocessors/convertEndnoteRefs.rb
 #-----------------------------------------------------------------------------
+  syllabus-html:
+    extends: [html-scholar]
+    pandoc:
+      filter: 
+        - filters/assimilateSyllabusMetadata.rb #regularise metadata
+#-----------------------------------------------------------------------------
+
 # https://github.com/jez/tufte-pandoc-css
   tufte:
     pandoc:
@@ -769,7 +789,7 @@ templates:
       template: templates/custom/article-draft.latex
       standalone: true
       filter:
-        - pandoc-citeproc #process citations
+      #  - pandoc-citeproc #process citations
       csl: csl/chicago-author-date.csl
     metadata:
       classoption: oneside, draft
@@ -816,4 +836,6 @@ templates:
       toc: false
     postprocessors:
     #- 'postprocessors/fixLaTeX.rb-ZB'
+
+
 

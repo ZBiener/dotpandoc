@@ -1,0 +1,141 @@
+% !TEX TS-program = xelatex
+% !TEX encoding = UTF-8 Unicode
+%%
+%%%
+%%%  Syllabus template for use with style files at http://kjhealy.github.com/latex-custom-kjh
+%%%  Kieran Healy
+\PassOptionsToPackage{unicode=true$for(hyperrefoptions)$,$hyperrefoptions$$endfor$}{hyperref} % options for packages loaded elsewhere
+\PassOptionsToPackage{hyphens}{url}
+$if(colorlinks)$
+\PassOptionsToPackage{dvipsnames,svgnames*,x11names*}{xcolor}
+$endif$
+
+\documentclass[11pt,article,oneside]{memoir}
+
+%%% custom style file with standard settings for xelatex and biblatex. Note that when [minion] is present, we assume you have minion pro installed for use with pdflatex.
+%\usepackage[minion]{org-preamble-pdflatex} 
+
+%%% alternatively, use xelatex instead
+%\usepackage{org-preamble-xelatex} 
+
+\usepackage{fontspec}
+\usepackage{xunicode}
+\usepackage{url}
+\usepackage{rotating}
+\usepackage{memoir-article-styles}
+\usepackage[american]{babel}
+\usepackage[babel]{csquotes}
+\usepackage[svgnames]{xcolor}
+\usepackage{soul}
+\usepackage[xetex, colorlinks=true, urlcolor=DarkSlateBlue,
+citecolor=DarkSlateBlue, filecolor=DarkSlateBlue, plainpages=false,
+pdfpagelabels, bookmarksnumbered]{hyperref}
+\usepackage{etoolbox}
+\usepackage{ltablex} 
+\usepackage{multirow}
+\usepackage{calc}
+
+
+\makechapterstyle{memo-comments}{
+  \renewcommand\thesection{\arabic{section}} 
+  \setsecheadstyle{\Large\sffamily\bfseries} 
+  \setsubsecheadstyle{\large\sffamily\itshape} 
+  \setsubsubsecheadstyle{\normalsize\sffamily} 
+  \renewcommand{\printchaptername}{} 
+  \renewcommand{\chapternamenum}{}
+  \renewcommand{\chaptitlefont}{\normalfont\Huge\fontseries{bx}\sffamily\color{pagesectioning}}
+  \renewcommand{\chapnumfont}{\chaptitlefont} 
+  \renewcommand{\printchapternum}{\chapnumfont \thechapter\space} 
+  \renewcommand{\afterchapternum}{} 
+  \renewcommand{\printchaptername}{\secheadstyle}
+  \renewcommand{\cftchapterfont}{\normalfont} 
+  \renewcommand{\cftchapterpagefont}{\normalfont\sffamily}
+  \renewcommand{\cftsectionpagefont}{\normalfont\sffamily} 
+  \renewcommand{\cftchapterpresnum}{\sffamily} 
+  % \renewcommand{\cftchapterleader}{} 
+  % \renewcommand{\cftchapterafterpnum}{\cftparfillskip}
+  \captiontitlefont{\small}
+  \settocdepth{chapter}
+  \maxsecnumdepth{chapter} 
+  \setsecnumdepth{chapter}
+
+  % reduce skip after section heading
+  \setaftersecskip{1.7ex}
+  
+  % Title 
+  \pretitle{\begin{flushleft}\LARGE\sffamily\bfseries}
+    \posttitle{\end{flushleft}\par\vskip 2.5em}
+  \preauthor{\begin{flushleft}\Large\sffamily}
+    \postauthor{\end{flushleft}}
+  \predate{\begin{flushleft}\sffamily\footnotesize\vspace{0.9em}}
+    \postdate{\end{flushleft}\par\vskip 2em}
+}
+
+
+\let\toprule\par
+\let\bottomrule\par
+
+% Definitions
+\def\mykeywords{}
+\def\mybibliostyle{plain}
+\def\mybibliocommand{}
+\def\mysubtitle{}
+\def\myaffiliation{University of Cincinnati}
+\def\myaddress{259D McMicken Hall}
+\def\myemail{$for(correspondence)$$correspondence$$sep$ \and $endfor$}
+\def\myweb{}
+\def\myphone{$if(phone)$$for(phone)$$phone$$sep$ \and $endfor$$endif$}
+\def\myversion{}
+\def\myrevision{}
+
+\def\myauthor{$for(author)$$author$$sep$ \and $endfor$}
+\def\mysubtitle{Syllabus}
+\def\mytitle{{\small \MakeUppercase{$if(course-number)$$course-number$$endif$$if(date)$ · $date$$endif$$if(time)$ · $time$$endif$} \newline\vskip .5em } \HUGE $title$}
+
+
+\begin{document}
+
+%%% If using xelatex and not pdflatex
+%%% xelatex font choices
+\defaultfontfeatures{}
+\defaultfontfeatures{Scale=MatchLowercase}    
+% You will need to buy these fonts, change the names to fonts you own, or comment out if not using xelatex.      
+\setromanfont[Mapping=tex-text]{Minion Pro} 
+\setsansfont[Mapping=tex-text]{Myriad Pro SemiExtended} 
+ %\setmonofont[Mapping=tex-text,Scale=0.8]{Pragmata} 
+
+%% blank label items; hanging bibs for text
+%% Custom hanging indent for vita items
+
+
+%% RCS info string for version tracking
+\chapterstyle{memo-comments}  % alternative styles are defined in latex-custom-kjh/needs-memoir/
+% \pagestyle{kjh}
+
+\title{\LARGE \mytitle}     
+\author{\myauthor \newline \footnotesize\texttt{\myemail}}
+\subtitle{aoidjfoasidfj}
+\date{}
+
+
+\maketitle
+
+% Include version information in footer if using vc package (see above). 
+
+
+% Copyright Page
+% \textcopyright{} \mycopyright
+
+
+%
+% Main Content
+%
+
+$body$
+
+
+%\newpage
+%% Uncomment if you want a printed bibliography.
+%\printbibliography 
+
+\end{document}
