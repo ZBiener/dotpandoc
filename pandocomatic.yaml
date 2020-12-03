@@ -46,7 +46,7 @@ templates:
       - preprocessors/fixCrossref.rb #allows to put crossref labels in styled captions
     pandoc:
       standalone: true
-      verbose: true # verbose by default
+      verbose: false # verbose by default
     metadata:
       linkReferences: true
     postprocessors: []
@@ -56,13 +56,13 @@ templates:
     extends: [user-info]
     pandoc:
       standalone: true
-      verbose: true # verbose by default
+      verbose: false # verbose by default
       citeproc: true
       #lua-filter:
       #  - filters/pagebreak.lua # use \newpage{} also for HTML and docx
-      csl: csl/chicago-author-date.csl
-      citation-abbreviations: cite-abbr.json # my journal abbreviations
-      reference-links: true
+      csl: csl/chicago-syllabus.csl
+      #citation-abbreviations: cite-abbr.json # my journal abbreviations
+      reference-links: false
     metadata:
       bibliography: "/Users/zvb1/Library/texmf/bibtex/bib/BibDeskLibrary.json" #converted from the bib format, just for CSL use.
       reference-section-title: References
@@ -535,11 +535,15 @@ templates:
 #-----------------------------------------------------------------------------
   syllabus-tex:
     extends: ['refs']
+    metadata:
+      colorlinks: true
     pandoc:
       from: markdown+multiline_tables
       to: latex
       standalone: true
-      template: templates/custom/syllabus.latex   
+      template: templates/custom/syllabus.latex
+    postprocessors: 
+      - postprocessors/addTableRules.rb    #automatically adds cmidrules inside tables. To disable, manually remove, or add metadata option and modify template
 
 #-----------------------------------------------------------------------------
   syllabus-pdf:
