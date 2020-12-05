@@ -1,0 +1,13 @@
+from: markdown
+to: beamer
+#slide-level: 1
+incremental: true
+use-extension: tex
+pdf-engine: 'xelatex'
+template: /Users/zvb1/.pandoc/templates/custom/metropolis.latex
+  metadata:
+    theme: metropolis
+    outertheme: miniframes
+    innertheme: circles
+    themeoptions:
+      - progressbar=frametitle

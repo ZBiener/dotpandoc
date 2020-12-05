@@ -1,0 +1,14 @@
+from: markdown+raw_tex+simple_tables+escaped_line_breaks
+template: /Users/zvb1/.pandoc/templates/custom/letter.latex
+metadata:
+  linestretch: '1.1'
+  geometry: 'margin=1in'
+  letterhead: "/Users/zvb1/.pandoc/images/UCIDPrimaryBlackRed.pdf"
+  wallpaperXoffset: 1in #usually the same as the margins set in geometry metadata
+  wallpaperYoffset: 1in #usually the same as the margins set in geometry metadata
+  headerfont: 'Open Sans'
+  signature-before: -6ex
+  signature-after: 1ex
+  signature-width: 70mm
+  closing-indentation: 0pt
+  firstpagefooter: "An affirmative action/equal opportunity institution"

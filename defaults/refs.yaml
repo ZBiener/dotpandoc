@@ -2,13 +2,14 @@ standalone: true
 verbosity: INFO # verbose by default
 citeproc: true
 cite-method: citeproc
-bibliography: /Users/ian/.local/share/pandoc/Core.json #JSON faster than BIB, symlinked into Pandoc data dir
-citation-abbreviations: /Users/ian/.local/share/pandoc/cite-abbr.json # my journal abbreviations
-csl: /Users/ian/.local/share/pandoc/csl/cell-doi.csl
-filters: 
+bibliography: "/Users/zvb1/Library/texmf/bibtex/bib/BibDeskLibrary.json" #converted from the bib format, just for CSL use. #JSON faster than BIB
+#citation-abbreviations: /Users/zvb1/.pandoc/cite-abbr.json # my journal abbreviations
+csl: /Users/zvb1/.pandoc/csl/chicago-syllabus.csl
+filters:
   - pagebreak.lua # use \newpage{} also for HTML and docx
 reference-links: true
 metadata:
   reference-section-title: References
   notes-after-punctuation: false
   link-citations: true
+  csl-hanging-indent: true

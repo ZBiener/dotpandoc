@@ -4,3 +4,14 @@ verbosity: INFO # verbose by default
 to: latex
 pdf-engine: xelatex
 template: leaflet.latex
+metadata:
+  mainfont: 'Greta Text Pro'
+  mainfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
+  sansfont: 'Greta Sans Pro'
+  sansfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
+  monofont: 'Fira Code'
+  leaflet-logo:
+  leaflet-no-cutlines: true
+  leaflet-no-tumble: true
+  leaflet-page1-background-image:
+  leaflet-page6-background-color: "DDCCAA"

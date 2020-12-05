@@ -1,0 +1,14 @@
+from: markdown+compact_definition_lists
+to: html5
+section-divs: true
+standalone: true
+mathjax: true
+filter:
+  - filters/assimilateMetadata.rb # regularise metadata
+  - pandoc-sidenote # brew install jez/formulae/pandoc-sidenote
+template: 'templates/tufte.html5'
+css:
+  - 'templates/tufte.css'
+  - 'templates/tuftepandoc.css'
+metadata:
+  lang: 'en-US'

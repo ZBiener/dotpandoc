@@ -42,7 +42,7 @@ templates:
 #-----------------------------------------------------------------------------
   crossref: # note crossref should come before citeproc!
     setup: []
-    preprocessors: 
+    preprocessors:
       - preprocessors/fixCrossref.rb #allows to put crossref labels in styled captions
     pandoc:
       standalone: true
@@ -67,7 +67,7 @@ templates:
       bibliography: "/Users/zvb1/Library/texmf/bibtex/bib/BibDeskLibrary.json" #converted from the bib format, just for CSL use.
       reference-section-title: References
       notes-after-punctuation: false
-      link-citations: true 
+      link-citations: true
       csl-hanging-indent: true
 #-----------------------------------------------------------------------------
   plain:
@@ -121,12 +121,12 @@ templates:
 #-----------------------------------------------------------------------------
   docx-refs-not-linked:
     extends: [docx,refs]
-    metadata: 
+    metadata:
       link-citations: false
 #-----------------------------------------------------------------------------
   docx-endnote:
     extends: [docx,refs]
-    preprocessors: 
+    preprocessors:
       add: preprocessors/convertEndnoteRefs.rb  #turns endnote citations to pandoc citations
 #-----------------------------------------------------------------------------
   docx-changes:
@@ -147,7 +147,7 @@ templates:
 #-----------------------------------------------------------------------------
 #:::::::::::::::::::::::::::::: PRESENTATIONS ::::::::::::::::::::::::::::::::
 #-----------------------------------------------------------------------------
-# Note for reveal.js standalone download the files  and put them 
+# Note for reveal.js standalone download the files  and put them
 # in a reveal.js/ folder relative to the markdown file.
 #   wget https://github.com/hakimel/reveal.js/archive/master.tar.gz
 #   tar -xzvf master.tar.gz
@@ -195,7 +195,7 @@ templates:
       to: latex
       #pdf-engine: xelatex #Why did I have this here before?
       standalone: true
-      filter: 
+      filter:
         - filters/assimilateMetadata.rb # handle academic metadata
       template: templates/custom.latex
       #base-header-level: 2
@@ -220,7 +220,7 @@ templates:
       urlcolor: BrickRed
       lang: 'en-GB'
       nonumberfigures: true # I use Scrivener autonumbering, so disable for LaTeX
-    postprocessors: 
+    postprocessors:
       - postprocessors/fixLaTeX.rb
 #-----------------------------------------------------------------------------
   latex-refs:
@@ -237,7 +237,7 @@ templates:
 #-----------------------------------------------------------------------------
   latex-endnote:
     extends: [latex-refs]
-    preprocessors: 
+    preprocessors:
       - preprocessors/convertEndnoteRefs.rb
 #-----------------------------------------------------------------------------
   latex-chemfig: # example of using header-includes with yaml block scalar data http://yaml-multiline.info/
@@ -329,7 +329,7 @@ templates:
       citecolor: Sepia
       urlcolor: BrickRed
       geometry: ['margin=1.5cm','top=2.1cm']
-    postprocessors: 
+    postprocessors:
       - postprocessors/fixLaTeX.rb
 #-----------------------------------------------------------------------------
   letter-UC:
@@ -382,20 +382,20 @@ templates:
 # https://github.com/Wandmalfarbe/pandoc-latex-template
   eisvogel:
     extends: 'refs'
-    preprocessors: 
+    preprocessors:
       #- preprocessors/removeImageDimensions # remove image dimensions
     pandoc:
       from: markdown
       to: latex
       standalone: true
-      filter: 
+      filter:
         - filters/assimilateMetadata.rb # handle academic matadata
       template: templates/eisvogel.latex
       toc: true
       shift-heading-level-by: 1
-    metadata: 
+    metadata:
       papersize: letter
-      book: false 
+      book: false
       titlepage: true
       titlepage-color: BB4433
       titlepage-text-color: FFFFFF
@@ -428,11 +428,11 @@ templates:
       header-left:
       header-center:
       footer-right:
-      footer-left: 
+      footer-left:
       footer-center:
       footnotes_pretty: true
       footnotes-disable-backlinks: false
-    postprocessors: 
+    postprocessors:
       - postprocessors/fixLaTeX.rb
 #-----------------------------------------------------------------------------
   report-tex:
@@ -488,14 +488,14 @@ templates:
 # https://github.com/Wandmalfarbe/pandoc-latex-template
   eisvogel-endnote:
     extends: [eisvogel]
-    preprocessors: 
+    preprocessors:
       - preprocessors/convertEndnoteRefs.rb
 #-----------------------------------------------------------------------------
   latex-ieee:
     extends: [latex-refs]
     pandoc:
       template: templates/ieee.latex
-    metadata: 
+    metadata:
       fontsize: '10pt'
 #-----------------------------------------------------------------------------
 # https://github.com/pandoc-scholar/pandoc-scholar
@@ -503,7 +503,7 @@ templates:
     extends: [latex-refs]
     pandoc:
       template: templates/pandoc-scholar.latex
-    metadata: 
+    metadata:
       fontsize: '10pt'
 #-----------------------------------------------------------------------------
   memoir-with-refs:
@@ -542,7 +542,7 @@ templates:
       to: latex
       standalone: true
       template: templates/custom/syllabus.latex
-    postprocessors: 
+    postprocessors:
       - postprocessors/addTableRules.rb    #automatically adds cmidrules inside tables. To disable, manually remove, or add metadata option and modify template
 
 #-----------------------------------------------------------------------------
@@ -574,8 +574,8 @@ templates:
       theme: metropolis
       outertheme: miniframes
       innertheme: circles
-      themeoptions: 
-        - progressbar=frametitle        
+      themeoptions:
+        - progressbar=frametitle
     #postprocessors: ['postprocessors/removeLMODERN'] # NOTE: the lmodern package isn't needed for metropolis theme. This removed it.
   beamer-modern-tex:
     extends: [beamer-modern]
@@ -592,7 +592,7 @@ templates:
       number-sections: false
       section-divs: true
       mathjax: true
-      filter: 
+      filter:
         - filters/assimilateMetadata.rb #regularise metadata
       template: 'templates/custom.html'
       css: 'templates/custom.css'
@@ -601,7 +601,7 @@ templates:
       shift-heading-level-by: 1
     metadata:
       lang: 'en-GB'
-    postprocessors: 
+    postprocessors:
       - postprocessors/fixHTML.rb
 #-----------------------------------------------------------------------------
   html-selfcontained:
@@ -611,7 +611,7 @@ templates:
 #-----------------------------------------------------------------------------
   html-changes:
     extends: ['html']
-    preprocessors: 
+    preprocessors:
       - preprocessors/criticmarkup.rb
 #-----------------------------------------------------------------------------
   html-refs:
@@ -622,12 +622,12 @@ templates:
 #-----------------------------------------------------------------------------
   html-endnote:
     extends: [refs, html]
-    preprocessors: 
+    preprocessors:
       - preprocessors/convertEndnoteRefs.rb
 #-----------------------------------------------------------------------------
   html-scholar:
     extends: [refs, crossref, html]
-    pandoc: 
+    pandoc:
       template: 'templates/pandoc-scholar.html'
       css: 'templates/pandoc-scholar.css'
 #-----------------------------------------------------------------------------
@@ -651,13 +651,13 @@ templates:
 #-----------------------------------------------------------------------------
   html-endnote-pdf:
     extends: [html-refs-pdf]
-    preprocessors: 
+    preprocessors:
       - preprocessors/convertEndnoteRefs.rb
 #-----------------------------------------------------------------------------
   syllabus-html:
     extends: [html-scholar]
     pandoc:
-      filter: 
+      filter:
         - filters/assimilateSyllabusMetadata.rb #regularise metadata
 #-----------------------------------------------------------------------------
 
@@ -669,11 +669,11 @@ templates:
       section-divs: true
       standalone: true
       mathjax: true
-      filter: 
+      filter:
         - filters/assimilateMetadata.rb # regularise metadata
         - pandoc-sidenote # brew install jez/formulae/pandoc-sidenote
       template: 'templates/tufte.html5'
-      css: 
+      css:
         - 'templates/tufte.css'
         - 'templates/tuftepandoc.css'
     metadata:
@@ -722,7 +722,7 @@ templates:
       to: markdown
       output: out.md
       standalone: true
-      filter: 
+      filter:
         - filters/testFilter.rb
     metadata:
       #author: Joanna Doe
@@ -798,7 +798,7 @@ templates:
     metadata:
       classoption: oneside, draft
       geometry: 'paperheight=9in,paperwidth=5.7in, right=.2in, left=.2in, top=.2in, bottom=.5in'
-      fontfamily: 
+      fontfamily:
       draft: true
 
   elsarticle:
@@ -840,6 +840,3 @@ templates:
       toc: false
     postprocessors:
     #- 'postprocessors/fixLaTeX.rb-ZB'
-
-
-

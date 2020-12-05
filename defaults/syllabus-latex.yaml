@@ -1,0 +1,6 @@
+from: markdown+multiline_tables
+to: latex
+standalone: true
+template: /Users/zvb1/.pandoc/templates/custom/syllabus.latex
+metadata:
+  colorlinks: true

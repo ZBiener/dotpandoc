@@ -1,13 +1,14 @@
 from: markdown
 to: latex
 standalone: true
-filters: 
+filters:
   - assimilateMetadata # handle academic matadata
 template: eisvogel.latex
 toc: true
-shift-heading-level-by: 0
-metadata: 
-  titlepage: true
+shift-heading-level-by: 1
+metadata:
+  titlepage: false
+  wrap: auto
   titlepage-color: BB4433
   titlepage-text-color: FFFFFF
   titlepage-rule-color: FFFFFF
@@ -18,9 +19,9 @@ metadata:
   float-placement-figure: H
   #logo: "/Users/ian/Dropbox/Images/Logos/Platform-ION-Banner-White.png"
   #logo-width: 350
-  mainfont: 'Greta Sans Pro'
+  mainfont: 'Tex Gyre Pagella'
   mainfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
-  sansfont: 'Graublau Slab'
+  sansfont: 'Tex Gyre Adventor'
   sansfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
   monofont: 'Fira Code'
   mathfont: 'Cambria Math'
@@ -40,7 +41,7 @@ metadata:
   header-left:
   header-center:
   footer-right:
-  footer-left: 
+  footer-left:
   footer-center:
   footnotes_pretty: true
   footnotes-disable-backlinks: false

@@ -1,13 +1,13 @@
-from: markdown
+from: markdown+raw_tex
 to: latex
 standalone: true
-filters: 
+filters:
   - assimilateMetadata # handle academic metadata
 template: custom.latex
 shift-heading-level-by: 0
 metadata:
   documentclass: 'article'
-  classoption: twoside
+  classoption: oneside
   pagestyle: plain # control \pagestyle{}: the default article class supports plain (default), empty (no running heads or page numbers), and headings (section titles in running heads)
   fontsize: '12pt'
   linestretch: '1.5'
@@ -25,4 +25,6 @@ metadata:
   citecolor: Sepia
   urlcolor: BrickRed
   lang: 'en-GB'
-  nonumberfigures: true # I use Scrivener autonumbering, so disable for LaTeX
+  nonumberfigures: false # I use Scrivener autonumbering, so disable for LaTeX
+  titleDelim: '&nbsp;—&nbsp;'
+  figPrefix: ['Fig.','Figs.']

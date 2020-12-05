@@ -1,5 +1,6 @@
 from: markdown
 to: html5
+self-contained: true
 fail-if-warnings: false
 standalone: true
 number-sections: false
@@ -8,10 +9,10 @@ eol: lf
 html-math-method:
   method: mathjax
   url: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
-filters: 
+filters:
   - assimilateMetadata #regularise metadata
 template: custom.html
-css: /Users/ian/.local/share/pandoc/templates/custom.css
+css: /Users/zvb1/.pandoc/templates/custom.css
 toc: true
 toc-depth: 3
 shift-heading-level-by: 1
