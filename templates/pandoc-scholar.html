@@ -73,9 +73,7 @@ $endif$
 <p class="author-list">
 $for(author)$
   $if(author.last)$and $endif$<span property="author" typeof="Person">
-    $author.name$</span><sup>$for(author.affiliation)$$author.affiliation$$sep$,$endfor$
-    $if(author.correspondence)$<a href="mailto:$author.correspondence$">✉</a>$endif$
-    $if(author.equal_contributor)$†$endif$</sup>$sep$,
+    $author$
 $endfor$
 </p>
 <div class="author_affiliations">
