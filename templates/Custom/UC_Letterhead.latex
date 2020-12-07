@@ -1,4 +1,4 @@
-% !TEX TS-program = xelatex
+% !TEX program = xelatex
 % !TEX encoding = UTF-8 Unicode
 
 % see https://github.com/aaronwolen/pandoc-letter
@@ -91,9 +91,6 @@ $if(CJKmainfont)$
   \fi
 $endif$
 \fi
-% use Cambria/Arial to fix some font substitution problems for e.g. ⬄
-\newfontfamily\fixfont[]{Cambria}
-\newfontfamily\fixfontB[]{Arial Unicode MS}
 % use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 % use microtype if available
@@ -143,16 +140,7 @@ $endif$
 $if(geometry)$
 \usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
 $endif$
-$if(natbib)$
-\usepackage[$natbiboptions$]{natbib}
-\bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
-$endif$
-$if(biblatex)$
-\usepackage[$if(biblio-style)$style=$biblio-style$,$endif$$for(biblatexoptions)$$biblatexoptions$$sep$,$endfor$]{biblatex}
-$for(bibliography)$
-\addbibresource{$bibliography$}
-$endfor$
-$endif$
+
 $if(listings)$
 \usepackage{listings}
 \newcommand{\passthrough}[1]{#1}
@@ -216,10 +204,10 @@ $endif$
 
 $if(signature)$
 \usepackage{graphicx}
-\signature{$if(signature-before)$\vspace*{$signature-before$}$endif$\includegraphics$if(signature-width)$[width=$signature-width$]$endif${$signature$}$if(author)$\\$if(signature-after)$\vspace*{$signature-after$}$endif$$for(author)$$author$$sep$\\$endfor$\\$if(jobtitle)$$for(jobtitle)$$jobtitle$$sep$\\$endfor$$endif$$endif$\vspace*{4ex}}
+\signature{$if(signature-before)$\vspace*{$signature-before$}$endif$\includegraphics$if(signature-width)$[width=$signature-width$]$endif${$signature$}$if(author)$\\$if(signature-after)$\vspace*{$signature-after$}$endif$$for(author)$$author$$sep$\\$endfor$\\$if(jobtitle)$$for(jobtitle)$$jobtitle$$sep$\\$endfor$$endif$$if(external)$\\$affiliation$$endif$$endif$\vspace*{4ex}}
 $else$
 $if(author)$
-\signature{$for(author)$$author.name$$sep$\\$endfor$\\\\$if(author.jobtitle)$$for(author.jobtitle)$$author.jobtitle$$sep$\\$endfor$$endif$\vspace*{4ex}}
+\signature{$for(author)$$author$$sep$\\$endfor$\\\\$if(jobtitle)$$for(jobtitle)$$jobtitle$$sep$\\$endfor$$endif$\vspace*{4ex}}
 $endif$
 $endif$
 
@@ -263,7 +251,8 @@ $if(dir)$
 \fi
 $endif$
 
-\address{\\$for(return-address)$$if(headerfont)$\fontspec{$headerfont$}$endif$$return-address$$sep$\\$endfor$\\$for(correspondence)$$if(headerfont)$\fontspec{$headerfont$}$endif$$correspondence$$sep$\\$endfor$\\$for(phone)$$if(headerfont)$\fontspec{$headerfont$}$endif$$phone$$sep$\\$endfor$}
+\address{
+\\$for(return-address)$$if(headerfont)$\fontspec{$headerfont$}$endif$$return-address$$sep$\\$endfor$\\$for(correspondence)$$if(headerfont)$\fontspec{$headerfont$}$endif$\href{mailto:$correspondence$}{$correspondence$}$sep$\\$endfor$\\$for(phone)$$if(headerfont)$\fontspec{$headerfont$}$endif$$phone$$sep$\\$endfor$}
 
 
 $if(blockquote)$
@@ -279,7 +268,7 @@ $if(letterhead)$
 \usepackage{wallpaper}
 \renewcommand{\ThisULCornerWallPaper}[2]{%
   \AddToShipoutPicture*{\put(\LenToUnit{\wpXoffset},\LenToUnit{-\wpYoffset}){%
-      \parbox[b][\paperheight]{#1\paperwidth}{%       
+      \parbox[b][\paperheight]{#1\paperwidth}{%
         \includegraphics[width=#1\paperwidth,height=#1\paperheight,%
         keepaspectratio]{#2}%
         \vfill%

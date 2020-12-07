@@ -3,12 +3,12 @@ require 'rake'
 require 'open3'
 
 ## Define standard options
-metadata_filename = "/Users/zvb1/.pandoc/defaults/user-metadata.yaml"
+metadata_filename = "/Users/zvb1/.pandoc/defaults/userinfo.yaml"
 
 hash = {
-    "syllabus_html" =>   ["-d refs -d scholar-html -d syllabus-html", "html"],
-    "syllabus_pdf"  =>   ["-d refs -d syllabus-latex -d pdf-xelatex --quiet", "pdf"],
-    "latex_html"    =>   ["sodifj", "html"]
+    "syllabus_html" 	=>   ["-d refs -d scholar-html -d syllabus-html", "html"],
+    "syllabus_pdf"  	=>   ["-d refs -d syllabus-latex -d pdf-xelatex --quiet", "pdf"],
+    "UC_letterhead_pdf"	=>   ["-d UC-letterhead-latex -d pdf-xelatex --quiet", "pdf"]
 }
 
 ## Match the hash key with the user input, to find the required set of options
@@ -18,7 +18,7 @@ output_filename = File.join(File.dirname($*[1]), File.basename($*[1])).ext(exten
 
 ## Construct command
 
-command = "pandoc #{options} --metadata-file=#{metadata_filename} #{$*[1]} --output #{output_filename}"
+command = "pandoc #{options} --metadata-file=\"#{metadata_filename}\" --output \"#{output_filename}\" \"#{$*[1]}\""
 
 ## Run command
 puts command
