@@ -37,5 +37,6 @@ if status==0
 	puts output
 	system %{open "#{output_filename}"}
 else
-	puts error
+    puts error
+    exit 1
 end

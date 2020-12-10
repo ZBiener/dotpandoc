@@ -1,40 +1,27 @@
-% !TEX TS-program = xelatex
+% !TEX program = xelatex
 % !TEX encoding = UTF-8 Unicode
-%%
-%%%
-%%%  Syllabus template for use with style files at http://kjhealy.github.com/latex-custom-kjh
-%%%  Kieran Healy
-\PassOptionsToPackage{unicode=true$for(hyperrefoptions)$,$hyperrefoptions$$endfor$}{hyperref} % options for packages loaded elsewhere
-\PassOptionsToPackage{hyphens}{url}
-$if(colorlinks)$
-\PassOptionsToPackage{dvipsnames,svgnames*,x11names*}{xcolor}
-$endif$
 
 % Definitions
-\def\mykeywords{}
-\def\mybibliostyle{plain}
-\def\mybibliocommand{}
-\def\mysubtitle{}
-\def\myaffiliation{University of Cincinnati}
-\def\myaddress{259D McMicken Hall}
+%
+\def\mysubtitle{$if(subtitle)$$subtitle$$endif$}
+\def\myaffiliation{$if(affiliation)$$affiliation$$endif$}
+\def\myaddress{$if(room)$$room$$endif$}
 \def\myemail{$for(correspondence)$$correspondence$$sep$ \and $endfor$}
-\def\myweb{}
 \def\myphone{$if(phone)$$for(phone)$$phone$$sep$ \and $endfor$$endif$}
 \def\myversion{}
 \def\myrevision{}
 
 \def\myauthor{$for(author)$$author$$sep$ \and $endfor$}
-\def\mysubtitle{Syllabus}
-\def\mytitle{{\small \MakeUppercase{$if(course-number)$$course-number$$endif$$if(date)$ · $date$$endif$$if(time)$ · $time$$endif$} \newline\vskip .5em } \HUGE $title$}
+
+\def\mytitle{{\small \MakeUppercase{
+    $if(course-number)$$course-number$$endif$
+    $if(date)$ · $date$$endif$
+    $if(time)$ · $time$$endif$
+    $if(room)$ ·$room$$endif$}
+\newline\vskip .5em } \HUGE $title$}
 
 
-\documentclass[11pt,article,oneside]{memoir}
-
-%%% custom style file with standard settings for xelatex and biblatex. Note that when [minion] is present, we assume you have minion pro installed for use with pdflatex.
-%\usepackage[minion]{org-preamble-pdflatex}
-
-%%% alternatively, use xelatex instead
-%\usepackage{org-preamble-xelatex}
+\documentclass[12pt,article,oneside]{memoir}
 
 \usepackage{fontspec}
 \usepackage{xunicode}
@@ -45,50 +32,89 @@ $endif$
 \usepackage[svgnames]{xcolor}
 \usepackage{soul}
 \usepackage{etoolbox}
+\AtBeginEnvironment{longtable}{\sffamily\renewcommand*{\arraystretch}{2}}
 \usepackage{ltablex}
 \usepackage{multirow}
 \usepackage{calc}
+\usepackage{colortbl}
+
+$if(fontfamily)$
+\usepackage[$for(fontfamilyoptions)$$fontfamilyoptions$$sep$,$endfor$]{$fontfamily$}
+$endif$
+$if(linestretch)$
+\usepackage{setspace}
+\setstretch{$linestretch$}
+$endif$
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[$if(fontenc)$$fontenc$$else$T1$endif$]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+$for(fontfamilies)$
+  \newfontfamily{$fontfamilies.name$}[$fontfamilies.options$]{$fontfamilies.font$}
+$endfor$
+$if(mainfont)$
+    \setmainfont[$for(mainfontoptions)$$mainfontoptions$$sep$,$endfor$]{$mainfont$}
+$endif$
+$if(sansfont)$
+    \setsansfont[$for(sansfontoptions)$$sansfontoptions$$sep$,$endfor$]{$sansfont$}
+$endif$
+$if(monofont)$
+    \setmonofont[Mapping=tex-ansi$if(monofontoptions)$,$for(monofontoptions)$$monofontoptions$$sep$,$endfor$$endif$]{$monofont$}
+$endif$
 
 
-\makechapterstyle{memo-comments}{
-  \renewcommand\thesection{\arabic{section}}
-  \setsecheadstyle{\Large\sffamily\bfseries}
-  \setsubsecheadstyle{\large\sffamily\itshape}
-  \setsubsubsecheadstyle{\normalsize\sffamily}
-  \renewcommand{\printchaptername}{}
-  \renewcommand{\chapternamenum}{}
-  \renewcommand{\chaptitlefont}{\normalfont\Huge\fontseries{bx}\sffamily\color{pagesectioning}}
-  \renewcommand{\chapnumfont}{\chaptitlefont}
-  \renewcommand{\printchapternum}{\chapnumfont \thechapter\space}
-  \renewcommand{\afterchapternum}{}
-  \renewcommand{\printchaptername}{\secheadstyle}
-  \renewcommand{\cftchapterfont}{\normalfont}
-  \renewcommand{\cftchapterpagefont}{\normalfont\sffamily}
-  \renewcommand{\cftsectionpagefont}{\normalfont\sffamily}
-  \renewcommand{\cftchapterpresnum}{\sffamily}
-  % \renewcommand{\cftchapterleader}{}
-  % \renewcommand{\cftchapterafterpnum}{\cftparfillskip}
-  \captiontitlefont{\small}
-  \settocdepth{chapter}
-  \maxsecnumdepth{chapter}
-  \setsecnumdepth{chapter}
 
-  % reduce skip after section heading
-  \setaftersecskip{1.7ex}
+% Format for sectioning commands. To be replaced with titlesec
+\renewcommand\thesection{\arabic{section}}
+\setsecheadstyle{\Large\sffamily\bfseries}
+\setsubsecheadstyle{\large\sffamily}
+\setsubsubsecheadstyle{\normalsize\sffamily}
+\renewcommand{\printchaptername}{}
+\renewcommand{\chapternamenum}{}
+\renewcommand{\chaptitlefont}{\normalfont\Huge\fontseries{bx}\sffamily\color{pagesectioning}}
+\renewcommand{\chapnumfont}{\chaptitlefont}
+\renewcommand{\printchapternum}{\chapnumfont \thechapter\space}
+\renewcommand{\afterchapternum}{}
+\renewcommand{\printchaptername}{\secheadstyle}
+\renewcommand{\cftchapterfont}{\normalfont}
+\renewcommand{\cftchapterpagefont}{\normalfont\sffamily}
+\renewcommand{\cftsectionpagefont}{\normalfont\sffamily}
+\renewcommand{\cftchapterpresnum}{\sffamily}
+% \renewcommand{\cftchapterleader}{}
+% \renewcommand{\cftchapterafterpnum}{\cftparfillskip}
+\captiontitlefont{\small}
+\settocdepth{chapter}
+\maxsecnumdepth{chapter}
+\setsecnumdepth{chapter}
 
-  % Title
-  \pretitle{\begin{flushleft}\LARGE\sffamily\bfseries}
-    \posttitle{\end{flushleft}\par\vskip 2.5em}
-  \preauthor{\begin{flushleft}\Large\sffamily}
-    \postauthor{\end{flushleft}}
-  \predate{\begin{flushleft}\sffamily\footnotesize\vspace{0.9em}}
-    \postdate{\end{flushleft}\par\vskip 2em}
-}
 
+% reduce skip after section heading
+\setaftersecskip{1.7ex}
+
+% paragraph spacing
+\setlength{\parskip}{\baselineskip}
+\setlength{\parindent}{0em}
+
+% Title
+\pretitle{\begin{flushleft}\LARGE\sffamily\bfseries}
+\posttitle{\end{flushleft}\par\vskip 2.5em}
+\preauthor{\begin{flushleft}\Large\sffamily}
+\postauthor{\end{flushleft}}
+\predate{\begin{flushleft}\sffamily\footnotesize\vspace{0.9em}}
+\postdate{\end{flushleft}\par\vskip 2em}
 
 \let\toprule\par
 \let\bottomrule\par
 
+% Tight list spacing
+\usepackage{enumitem}
+\setlist[itemize]{noitemsep, topsep=-\baselineskip+.2ex}
+
+% Fix for pandoc references class
 $if(csl-refs)$
 \newlength{\cslhangindent}
 \setlength{\cslhangindent}{1.5em}
@@ -103,6 +129,10 @@ $if(csl-refs)$
   \ifnum #2 > 0
   \setlength{\parskip}{#2\baselineskip}
   \fi
+  % I don't understand how this environment works, the two lines below are a total
+  % to get less space between bibliography
+  \vspace{1.5ex}
+  \setlength{\parskip}{1ex}
  }%
  {}
 \usepackage{calc}
@@ -111,13 +141,9 @@ $if(csl-refs)$
 \newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 $endif$
-
-
-
-% settings for horizontal rules
-\usepackage{colortbl}
-%\noalign{\global\arrayrulewidth=2mm}
-
+$if(csquotes)$
+\usepackage{csquotes}
+$endif$
 
 
 $if(colorlinks)$
@@ -125,10 +151,6 @@ $if(colorlinks)$
 \definecolor{Sepia}{rgb}{.4,.1,.1}
 \definecolor{Mahogany}{rgb}{.6,.2,.2}
 \definecolor{BrickRed}{rgb}{.7,.3,.3}
-\definecolor{default-linkcolor}{rgb}{.6,.2,.2}
-\definecolor{default-filecolor}{rgb}{.6,.2,0}
-\definecolor{default-citecolor}{rgb}{.4,.1,.1}
-\definecolor{default-urlcolor}{rgb}{.7,.3,.3}
 $endif$
 
 \usepackage{hyperref}
@@ -137,7 +159,7 @@ $if(title-meta)$
             pdftitle={$title-meta$},
 $endif$
 $if(author)$
-            pdfauthor={$for(author)$$author.name$$sep$, $endfor$},
+            pdfauthor={$for(author)$$author$$sep$, $endfor$},
 $endif$
 $if(subject)$
             pdfsubject={$subject$},
@@ -148,9 +170,9 @@ $endif$
 $if(colorlinks)$
             colorlinks=true,
             linkcolor=$if(linkcolor)$$linkcolor$$else$Mahogany$endif$,
-            filecolor=$if(filecolor)$$filecolor$$else$default-filecolor$endif$,
-            citecolor=$if(citecolor)$$citecolor$$else$Sepia$endif$,
-            urlcolor=$if(urlcolor)$$urlcolor$$else$BrickRed$endif$,
+            filecolor=$if(filecolor)$$filecolor$$else$Mahogany$endif$,
+            citecolor=$if(citecolor)$$citecolor$$else$Mahogany$endif$,
+            urlcolor=$if(urlcolor)$$urlcolor$$else$Mahogany$endif$,
 $else$
             pdfborder={0 0 0},
 $endif$
@@ -159,22 +181,14 @@ $endif$
 
 \begin{document}
 
-%%% If using xelatex and not pdflatex
-%%% xelatex font choices
-\defaultfontfeatures{}
-\defaultfontfeatures{Scale=MatchLowercase}
-% You will need to buy these fonts, change the names to fonts you own, or comment out if not using xelatex.
-\setromanfont[Mapping=tex-text]{Minion Pro}
-\setsansfont[Mapping=tex-text]{Myriad Pro SemiExtended}
- %\setmonofont[Mapping=tex-text,Scale=0.8]{Pragmata}
+
 
 %% blank label items; hanging bibs for text
 %% Custom hanging indent for vita items
 
 
 %% RCS info string for version tracking
-\chapterstyle{memo-comments}  % alternative styles are defined in latex-custom-kjh/needs-memoir/
-% \pagestyle{kjh}
+\chapterstyle{memo-comments}
 
 \title{\LARGE \mytitle}
 \author{\myauthor \newline \footnotesize\texttt{\myemail}}
@@ -183,22 +197,9 @@ $endif$
 
 \maketitle
 
-% Include version information in footer if using vc package (see above).
-
-
-% Copyright Page
-% \textcopyright{} \mycopyright
-
-
-%
-% Main Content
-%
-
+%% Main Content
 $body$
 
 
-%\newpage
-%% Uncomment if you want a printed bibliography.
-%\printbibliography
 
 \end{document}
