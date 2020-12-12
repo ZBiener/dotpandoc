@@ -26,17 +26,14 @@
 \usepackage{fontspec}
 \usepackage{xunicode}
 \usepackage{url}
-\usepackage{rotating}
 \usepackage[american]{babel}
 \usepackage[babel]{csquotes}
 \usepackage[svgnames]{xcolor}
-\usepackage{soul}
 \usepackage{etoolbox}
+\usepackage{longtable,booktabs}
 \AtBeginEnvironment{longtable}{\sffamily\renewcommand*{\arraystretch}{2}}
-\usepackage{ltablex}
 \usepackage{multirow}
 \usepackage{calc}
-\usepackage{colortbl}
 
 $if(fontfamily)$
 \usepackage[$for(fontfamilyoptions)$$fontfamilyoptions$$sep$,$endfor$]{$fontfamily$}
@@ -91,14 +88,6 @@ $endif$
 \maxsecnumdepth{chapter}
 \setsecnumdepth{chapter}
 
-
-% reduce skip after section heading
-\setaftersecskip{1.7ex}
-
-% paragraph spacing
-\setlength{\parskip}{\baselineskip}
-\setlength{\parindent}{0em}
-
 % Title
 \pretitle{\begin{flushleft}\LARGE\sffamily\bfseries}
 \posttitle{\end{flushleft}\par\vskip 2.5em}
@@ -107,12 +96,15 @@ $endif$
 \predate{\begin{flushleft}\sffamily\footnotesize\vspace{0.9em}}
 \postdate{\end{flushleft}\par\vskip 2em}
 
-\let\toprule\par
-\let\bottomrule\par
+% Remove top and bottom rules from longtables
+\setlength{\aboverulesep}{0pt}
+\setlength{\belowrulesep}{0pt}
+\setlength\heavyrulewidth{0pt}
 
-% Tight list spacing
+% Tightlist spacing
 \usepackage{enumitem}
-\setlist[itemize]{noitemsep, topsep=-\baselineskip+.2ex}
+\setlist[itemize]{noitemsep, topsep=-\parskip}
+
 
 % Fix for pandoc references class
 $if(csl-refs)$
@@ -122,19 +114,25 @@ $if(csl-refs)$
 \setlength{\csllabelwidth}{3em}
 \newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
  {% don't indent paragraphs
+  
+  \sffamily
   \setlength{\parindent}{0pt}
+
+  % return to tight default paragraph spacing, with extra space to offet beginning
+  \vspace{2.5ex}
+  \setlength{\parskip}{3.0pt plus 3.0pt}
+  \linespread{1}
+  \selectfont
+
   % turn on hanging indent if param 1 is 1
   \ifodd #1 \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces\fi
   % set entry spacing
   \ifnum #2 > 0
   \setlength{\parskip}{#2\baselineskip}
   \fi
-  % I don't understand how this environment works, the two lines below are a total
-  % to get less space between bibliography
-  \vspace{1.5ex}
-  \setlength{\parskip}{1ex}
  }%
- {}
+
+
 \usepackage{calc}
 \newcommand{\CSLBlock}[1]{#1\hfill\break}
 \newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
@@ -143,14 +141,6 @@ $if(csl-refs)$
 $endif$
 $if(csquotes)$
 \usepackage{csquotes}
-$endif$
-
-
-$if(colorlinks)$
-\usepackage{xcolor}
-\definecolor{Sepia}{rgb}{.4,.1,.1}
-\definecolor{Mahogany}{rgb}{.6,.2,.2}
-\definecolor{BrickRed}{rgb}{.7,.3,.3}
 $endif$
 
 \usepackage{hyperref}
@@ -169,37 +159,32 @@ $if(keywords)$
 $endif$
 $if(colorlinks)$
             colorlinks=true,
-            linkcolor=$if(linkcolor)$$linkcolor$$else$Mahogany$endif$,
-            filecolor=$if(filecolor)$$filecolor$$else$Mahogany$endif$,
-            citecolor=$if(citecolor)$$citecolor$$else$Mahogany$endif$,
-            urlcolor=$if(urlcolor)$$urlcolor$$else$Mahogany$endif$,
+            linkcolor=$if(linkcolor)$$linkcolor$$else$DarkRed$endif$,
+            filecolor=$if(filecolor)$$filecolor$$else$DarkRed$endif$,
+            citecolor=$if(citecolor)$$citecolor$$else$DarkRed$endif$,
+            urlcolor=$if(urlcolor)$$urlcolor$$else$DarkRed$endif$,
 $else$
             pdfborder={0 0 0},
 $endif$
             breaklinks=true}
+
 %\urlstyle{same}
 
-\begin{document}
-
-
-
-%% blank label items; hanging bibs for text
-%% Custom hanging indent for vita items
-
-
-%% RCS info string for version tracking
-\chapterstyle{memo-comments}
+\begin{document} 
 
 \title{\LARGE \mytitle}
 \author{\myauthor \newline \footnotesize\texttt{\myemail}}
 \date{}
-
-
 \maketitle
 
-%% Main Content
+% Create modern layout: no indent, larger paragraph separation, 1.2 line spacing. 
+% Use with case. PANDOC's CSLReferences environment inherits these settings, and
+% must be modified with any template updates.
+\setlength{\parindent}{0em}
+\linespread{1.1}
+\setlength{\parskip}{\baselineskip}
+\selectfont
+
 $body$
-
-
 
 \end{document}
