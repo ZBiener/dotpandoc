@@ -10,3 +10,4 @@ metadata:
   monofont: 'TeX Gyre Cursor'
   monofontoptions: 'Scale=0.8'
   colorlinks: true
+  geometry: 'margin=1.5in'

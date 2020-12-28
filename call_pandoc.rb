@@ -8,7 +8,8 @@ metadata_filename = "/Users/zvb1/.pandoc/defaults/userinfo.yaml"
 hash = {
     "syllabus_html" 	=>   ["-d refs -d scholar-html -d syllabus-html", "html"],
     "syllabus_pdf"  	=>   ["-d refs -d syllabus-latex -d pdf-xelatex --quiet", "pdf"],
-    "UC_letterhead_pdf"	=>   ["-d UC-letterhead-latex -d pdf-xelatex --quiet", "pdf"]
+    "UC_letterhead_pdf"	=>   ["-d UC-letterhead-latex -d pdf-xelatex --quiet", "pdf"],
+    "letter_pdf"	=>      ["-d letter -d pdf-xelatex --quiet", "pdf"],
 }
 
 ## Match the hash key with the user input, to find the required set of options
@@ -18,7 +19,7 @@ output_filename = File.join(File.dirname($*[1]), File.basename($*[1])).ext(exten
 
 ## Construct command
 
-command = "pandoc #{options} --metadata-file=\"#{metadata_filename}\" --output \"#{output_filename}\" \"#{$*[1]}\""
+command = "pandoc --metadata-file=\"#{metadata_filename}\" #{options}  --output \"#{output_filename}\" \"#{$*[1]}\""
 
 ## Run command
 puts command

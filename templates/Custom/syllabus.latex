@@ -22,7 +22,9 @@
 
 
 \documentclass[12pt,article,oneside]{memoir}
-
+$if(geometry)$
+\usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
+$endif$
 \usepackage{fontspec}
 \usepackage{xunicode}
 \usepackage{url}
@@ -68,8 +70,8 @@ $endif$
 % Format for sectioning commands. To be replaced with titlesec
 \renewcommand\thesection{\arabic{section}}
 \setsecheadstyle{\Large\sffamily\bfseries}
-\setsubsecheadstyle{\large\sffamily}
-\setsubsubsecheadstyle{\normalsize\sffamily}
+\setsubsecheadstyle{\large\sffamily\bfseries}
+\setsubsubsecheadstyle{\normalsize\sffamily\bfseries}
 \renewcommand{\printchaptername}{}
 \renewcommand{\chapternamenum}{}
 \renewcommand{\chaptitlefont}{\normalfont\Huge\fontseries{bx}\sffamily\color{pagesectioning}}
@@ -132,6 +134,9 @@ $if(csl-refs)$
   \fi
  }%
 
+
+\usepackage{siunitx}
+\sisetup{group-separator = {\,}}
 
 \usepackage{calc}
 \newcommand{\CSLBlock}[1]{#1\hfill\break}
