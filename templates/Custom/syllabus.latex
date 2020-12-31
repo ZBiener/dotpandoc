@@ -25,7 +25,6 @@
 $if(geometry)$
 \usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
 $endif$
-\usepackage{fontspec}
 \usepackage{xunicode}
 \usepackage{url}
 \usepackage[american]{babel}
@@ -36,6 +35,13 @@ $endif$
 \AtBeginEnvironment{longtable}{\sffamily\renewcommand*{\arraystretch}{2}}
 \usepackage{multirow}
 \usepackage{calc}
+\usepackage{amssymb}
+\usepackage{pifont}
+\usepackage{newunicodechar}
+\newunicodechar{✓}{\ding{51}}
+\newunicodechar{✗}{\ding{55}}
+\usepackage{textualicomma}
+
 
 $if(fontfamily)$
 \usepackage[$for(fontfamilyoptions)$$fontfamilyoptions$$sep$,$endfor$]{$fontfamily$}
@@ -47,7 +53,6 @@ $endif$
 \usepackage{ifxetex,ifluatex}
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[$if(fontenc)$$fontenc$$else$T1$endif$]{fontenc}
-  \usepackage[utf8]{inputenc}
 \else % if luatex or xelatex
     \usepackage{fontspec}
   \fi
